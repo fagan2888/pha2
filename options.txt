@@ -2,9 +2,10 @@
 # "python get_scenario_data.py --write-rhos" to create inputs dir, basic inputs and rho files
 # "python get_pha_data_monthly_logistic.py" to create pha subdir and scenario data
 # "python tabulate_fuel_costs.py" to create a '_mean' pha subdir and scenario data
-# change inputs-dir and pha-subdir below to refer to the data you want to use
+# cp inputs/pha_125_logistic/fuel_cost_curves_mean.dat inputs/pha_125_logistic_mean/fuel_cost_curves.tab
+# change --inputs-dir and --pha-subdir when calling ReferenceModel to refer to the data you want to use
 # "python ReferenceModel.py" to create .dat files in pha subdir
-# use runph with various options to solve the model
+# use runph with various options to solve the model (note: it will only use model config options from options.txt, not command line)
 # use summarize_scenario_results_01_99.py or summarize_scenario_results.py to get statistics 
 # for all the model runs
 # note: everything above except ReferenceModel and runph have their own inputs-dir 
@@ -16,6 +17,7 @@
 --pha-subdir pha_125_logistic
 --demand-response-share 0.103
 --biofuel-limit 1.0
+--psip-relax
 --verbose 
 # note: following options are only used by 'switch solve', not runph (pha)
 --stream-solver

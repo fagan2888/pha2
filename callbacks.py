@@ -8,18 +8,11 @@ from pyomo.pysp.phutils import indexToString
 
 import sys, os, datetime, inspect
 
-cur_dir = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(os.path.join(cur_dir, "switch-hawaii-core"))
-import util
-from util import get
+from switch_mod.hawaii import util
+from switch_mod.hawaii.util import get
 
-build_vars = [
-    "BuildProj", "BuildBattery", 
-    "BuildPumpedHydroMW", "BuildAnyPumpedHydro",
-    "RFMSupplyTierActivate",
-    "BuildElectrolyzerMW", "BuildLiquifierKgPerHour", "BuildLiquidHydrogenTankKg",
-    "BuildFuelCellMW"
-]
+from pha import build_vars
+
 inputs_dir = "inputs"
 
 # note: we make a best effort to get a unique, shared jobid for each job,

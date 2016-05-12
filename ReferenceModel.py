@@ -34,7 +34,9 @@ if __name__ == '__main__':
         )
 else:
     # The module was imported; create the model so it can be used by runph 
+    # prevent processing of command-line arguments, since those are the runph args at this point
     print "defining model..."
-    model = switch_mod.solve.main(return_model=True)
+    args = switch_mod.solve.get_option_file_args()
+    model = switch_mod.solve.main(args=args, return_model=True)
 
 
