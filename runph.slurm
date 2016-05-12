@@ -78,7 +78,7 @@
 #SBATCH --tasks-per-node=2
 export coordinator_reserved_slots=1  # number of slots to reserve for the coordinator processes on the first node
 export workers_per_node=2  # number of slots to use for workers on each node (could be reduced to conserve RAM)
-export runph_cmd='runph --phpyro-required-workers=1 --instance-directory=inputs/pha_125_logistic_mean --rho-cfgfile=callbacks --user-defined-extension=callbacks --verbose --enable-ww-extensions --ww-extension-cfgfile=wwph.cfg --ww-extension-suffixfile=inputs/wwph.suffixes --default-rho=100000000 --termdiff-threshold=0.001 --linearize-nonbinary-penalty-terms=7 --breakpoint-strategy=1 --solver-manager=phpyro --shutdown-pyro --pyro-port=$nsp --solver=cplexamp --scenario-solver-options="threads=1" --model-directory=. --traceback --max-iterations=1000 --bounds-cfgfile=pha_bounds_cfg.py'
+export runph_cmd='runph --phpyro-required-workers=1 --instance-directory=inputs/pha_125_logistic_mean --user-defined-extension=callbacks --verbose --enable-ww-extensions --ww-extension-cfgfile=wwph.cfg --ww-extension-suffixfile=inputs/wwph.suffixes --default-rho=100000000 --termdiff-threshold=0.001 --linearize-nonbinary-penalty-terms=7 --breakpoint-strategy=1 --solver-manager=phpyro --shutdown-pyro --pyro-port=$nsp --solver=cplexamp --scenario-solver-options="threads=1" --model-directory=. --traceback --max-iterations=1000 --bounds-cfgfile=pha_bounds_cfg.py'
 export PHA_WRITE_ITER0_SCENARIO_BUILDS="1"
 
 # # one solution, for the PSIP preferred plan

@@ -187,4 +187,9 @@ test runph with mean prices
 find 125 best scenarios
 find best scenario for mean
 test heco psip with all prices
-test all best scenarios (or only 70/80/90?) with all prices
+test all best scenarios with all prices
+graph cost vs. risk for all scenarios
+identify interesting questions -- what makes a solution low cost or low risk
+cluster portfolios and compare average values of build vars between the clusters to answer these questions
+compare low-risk to high-risk scenarios at various cost levels
+choose several different portfolios with different cost/risk levels; describe the general characteristics of each (how much RE and batteries, whether/when ConvertToLNG or RFMSupplyTierActivate are set)
