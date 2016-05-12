@@ -1,0 +1,25 @@
+# To use: 
+# "python get_scenario_data.py --write-rhos" to create inputs dir, basic inputs and rho files
+# "python get_pha_data_monthly_logistic.py" to create pha subdir and scenario data
+# "python tabulate_fuel_costs.py" to create a '_mean' pha subdir and scenario data
+# change inputs-dir and pha-subdir below to refer to the data you want to use
+# "python ReferenceModel.py" to create .dat files in pha subdir
+# use runph with various options to solve the model
+# use summarize_scenario_results_01_99.py or summarize_scenario_results.py to get statistics 
+# for all the model runs
+# note: everything above except ReferenceModel and runph have their own inputs-dir 
+# and pha-subdir variables that have to be changed before running them. (This could
+# be simplified by having them use switch_mod.solve.get_option_file_args and doing 
+# some argument parsing.) (Maybe everything before runph could be moved into get_scenario_data.py.)
+
+--inputs-dir inputs_tiny
+--pha-subdir pha_125_logistic
+--demand-response-share 0.103
+--biofuel-limit 1.0
+--verbose 
+# note: following options are only used by 'switch solve', not runph (pha)
+--stream-solver
+--solver=cplex --solver-io=nl 
+#--solver-options-string="mipgap=0.001 display=1 mipdisplay=1 primalopt='' advance=2 threads=1 iisfind=1"
+--solver-options-string="mipgap=0.001 display=1 mipdisplay=1 primalopt='' advance=2 threads=1"
+--suffixes iis

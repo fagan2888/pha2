@@ -1,0 +1,190 @@
+# note: based on these links, it seems like Waianae Solar by Eurus Energy America off Ala Akau Street is the only waiver project still in the running. This has 40.4 MW AC / 27.6 MW DC of horizontal single-axis trackers. PPA is 14.5 cents/kWh nominal (no escalator).
+# http://www.greentechmedia.com/articles/read/Vital-Stats-on-the-Biggest-Solar-Project-in-Hawaii (includes list of all 8 waiver projects proposed and what happened to each)
+# http://www.bizjournals.com/pacific/news/2015/08/03/hawaii-regulators-approve-four-major-oahu-solar.html
+# http://www.civilbeat.com/2014/12/heco-moves-forward-with-new-oahu-solar-projects/
+# http://www.hawaiicleanenergyinitiative.org/state-puc-turns-down-3-heco-solar-projects/
+# http://eurusenergy.com/news/press-releases/eurus-energy-america/waianae-solar-project-construction-financing/
+#
+# Build schedule from PSIP Theme 2: (see 2016-04-01 PSIP, bk 1, p. 5.24)
+#
+# BUILD
+# NOTE: waiver projects were canceled but HECO assumes they'll be replaced with something similar so we do too.
+# NOTE: we don't have code in place to choose between tracking and fixed PV on the same site,
+# so we will just use CentralTrackingPV (exclude CentralFixedPV) for all utility-scale solar,
+# including the waiver projects which HECO is planning to replace and the future solar which
+# HECO says will be fixed-tilt. (We could test which is a better choice and take HECO to task if
+# they've made the wrong choice, but that's not our goal at this point.)
+#
+# 2016
+# 27.6 MW Waiver PV Projects added 12/31/2016 (CentralTrackingPV)
+# ** this is Waianae Solar by Eurus Energy America; for now we model it as generic CentralTrackingPV forced into the model
+#
+# 2018
+# Six -8.14 MW Schofield Plants added (IC_Schofield)
+# Install 24MW NPM Wind (Wind)
+# 109.6MW Waiver PV added 1/1/2018 (CentralPV or CentralTrackingPV)
+# ** this is SunEdison which HECO rejected 2/16, but HECO says they'll add similar
+# Install 10MW of Onshore Wind (CBRE) (Wind)
+# Install 15MW of Utility PV (CBRE) (CentralPV or CentralTrackingPV)
+
+# 2019
+# 90 MW Contingency BESS added
+
+# 2020
+# Install 100MW JBPHH Plant, 12/2020 (IC_Barge)
+# Install 30MW of Onshore Wind (Wind)
+# Install 60MW of Utility PV  (CentralPV or CentralTrackingPV)
+#
+# 2021
+# Install 27 MW KMCBH Plant, 6/2021 (IC_MCBH)
+# Install 3x1 CC, 6/2021  (CC_383)
+#
+# 2030
+# Install 100MW of Utility PV   (CentralPV or CentralTrackingPV)
+# Install 200MW of Offshore Wind  (OffshoreWind)
+#
+# 2040
+# Install 200MW of Utility PV    (CentralPV or CentralTrackingPV)
+# Install 200MW of Offshore Wind  (OffshoreWind)
+#
+# 2045
+# Install 300MW of Utility PV    (CentralPV or CentralTrackingPV)
+# Install 400MW of Offshore Wind  (OffshoreWind)
+
+# RETIRE
+# 2019
+# Convert H8 & 9 to synchronous condenser
+#
+# 2020
+# Kahe 1, 2, 3 Deactivated, 12/2020
+#
+# 2022
+# Waiau 3 & 4 Deactivated, 1/2022
+# Kahe 4 Deactivated, 1/2022
+# Kahe 1, 2, 3 converted to synchronous condenser
+#
+# 2024
+# Waiau 5 & 6 Deactivated, 1/2024
+#
+# 2030
+# Waiau 7 & 8 Deactivated, 1/2030
+
+# build new tables:
+# generator_costs -> rename to generator_info
+# generator_costs_by_year   - technology, year, base_year, overnight_cost
+
+// change "WND", "SUN" and "MSW" to "solar", "wind" and "waste"
+// - scenario_data, rps and other switch files
+// - existing_plants and generator_info tables 
+// - "PSIP 2016 generator data.xlsx" and rerun import_data.py
+// - eventually, xlsx results files
+
+// import PSIP fuel price forecasts, converted to real $ (use EIA deflator)
+
+// add LNG conversion to build variables <- no, assume it's possible to do the conversion 
+// and use it for one period in any case
+
+// add AES retirement to build variables <- no, include this as a form of adaptation too
+
+# revise ReferenceModel, get_scenario_data, etc., to use switch_mod.solve configuration
+# change scenario_data.py to use generator_costs_by_year
+
+# New LNG infrastructure cost and volumes <- not doing; old ones are good enough; see notes in xlsx file
+# p. 2-8 says HECO is now focused on Henry Hub-indexed containerized LNG
+
+# p. 2-9 says LNG conversions for 7 plants on Oahu and Maui totaling 724 MW would cost about
+# $340 million (does this also include infrastructure for the 383 MW CC plant?). So should we
+# put in a cost of $470M/MW for LNG conversion?   <- added lng_conversion module to require
+# paying the conversion cost before using any LNG; treated it as an all-in cost because it is
+# not clear whether the conversion can be done in smaller parts (e.g., this may be shared pipelines,
+# dock, etc.)
+
+psip module:
+# - have active/inactive flag, so we can keep costs consistent
+# - force Eurus solar, IC_Schofield, IC_MCBH and IC_Barge (JBPHH) to be built in PSIP and our scenarios
+#   (since those seem to be going ahead for other reasons), i.e., at advanced planning stage
+# - force CBRE and NPM wind (or equal quantity of generic wind) to be built in PSIP, but not ours
+# - AES Deactivated, 9/2022   <- add a deactivate decision variable which forces to 0 output
+#   and subtracts fixed o&m; force this on in the PSIP scenario, make it free in the non-PSIP scenarios
+// - force any kind of solar to match the PSIP (probably only CentralTrackingPV available)
+
+# Add HECO's distributed PV targets
+
+# new fuel price forecasts generally - convert PSIP forecasts to real $ (EIA AEO shows brent spot in real
+# and nominal $, so you can find their inflation rate, which is 1.6-2.1%). Or use my own EIA-based ones?
+# I'm inclined to use PSIP as my starting point, but index biodiesel to diesel (and add EIA coal). 
+# Then, for Ulupono we have LNG grow at 4%/year instead of 2.9% and oil grow at 4%/year instead of 
+# 4.5%. Make containerized LNG a fixed multiple of Henry Hub LNG (or just drift from starting price). 
+# Do we offer a bulk LNG option for this one? If so, what are the prices?
+
+# update retirement dates in existing_plants_gen_tech
+# schedule PSIP retirements in all cases
+#  - update max age in existing_plants table
+
+# add unit size to import_data.py
+# add discrete build module to modules.txt
+# use discrete build decisions for fossil plants (don't spread CC_383 across multiple years)
+
+# use PSIP peak and avg loads (pp. J-44 and J-49 [610 and 615])
+# get PSIP DR numbers (use them to set DR level in pha version of demand_response_simple.py)
+# used 2045: (total pricing response, J-96) / (peak load, J-49) = (38.7+33.9+32.2)/(1534-516) = 0.103
+// use different DR levels for each year from PSIP pp. J-96 - J-97
+
+# use PSIP 6-hour battery costs and performance 
+#     - data start around p. J-81 and are also in HECO spreadsheet; they decline annually
+#     - add data to get_scenario_data.py
+#     - revise scenario_data.py and batteries.py to use annually varied costs
+#     - revise batteries.py to use fixed calendar life
+
+# double-check whether some unbuilt projects (waiver and Kalaeloa Solar) are being counted as 
+# existing projects and separately in available technologies.
+
+# include PSIP generator interconnect costs in import_data
+# calculate connect_cost.connect_cost_per_kw from generic connection cost and distance
+
+// use PSIP EV profile instead of high adoption from IRP (971 GWh in 2045 instead of 1058 GWh)
+
+// convert Kalaeloa to standard CC plant (like RPS Study) instead of high-marginal-efficiency cogen?
+
+// update HPOWER plant size based on recent upgrade
+
+// model AES 9 MW upgrade as investment option or already done?
+
+# build new basic dataset
+# build new PHA scenarios
+run model
+
+# pull latest version of switch? will that run with the current PHA framework or 
+# does it have to use the new solve module?
+
+# if I don't pull the latest version of switch, how do I modify scenario_data.py?
+
+# new prices:
+# - get EIA Henry Hub and Brent Crude prices in 2016$
+# - calculate mean annual growth of EIA Henry Hub and Brent Crude
+# - get PSIP prices in 2016$
+# - fit PSIP LNG, diesel and LSFO prices to EIA prices in nominal dollars, because HECO seems to
+#   have a big adder in these costs (at least LNG), which they don't adjust for inflation but probably
+#   should; so we adjust it for inflation, which raises LNG prices somewhat.
+# - generate new forecasts using EIA base and mean growth for Henry Hub and Brent Crude,
+#   with fit factors from PSIP
+
+# turn off MATS emission rules (HECO says they can probably get by with straight LSFO;
+# may need a 60/40 ULSD/LSFO blend in the future for NAAQS compliance but that's not clear yet)
+
+# restrict oil to <= 300 GWh/year in 2021-2045, >= 100 GWh/year before 2040 transition period
+# prevent adoption of biofuels before 2040.
+
+# calculate mean of our price trajectories
+# compare mean prices to heco prices 
+# change get_pha_data_monthly_logistic.py to save mean values in a .tab file
+# solve with mean prices
+# create pha inputs
+    # - get_scenario_data.py --write-rhos
+    # - ReferenceModel.py
+    # - tabulate_fuel_costs.py
+test runph with mean prices
+find 125 best scenarios
+find best scenario for mean
+test heco psip with all prices
+test all best scenarios (or only 70/80/90?) with all prices
