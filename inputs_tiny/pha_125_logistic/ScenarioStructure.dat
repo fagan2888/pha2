@@ -387,131 +387,131 @@ set Children[RootNode] :=
 ;
 
 param ConditionalProbability := RootNode 1.0
-    fuel_supply_curves_0000 0.008
-    fuel_supply_curves_0001 0.008
-    fuel_supply_curves_0002 0.008
-    fuel_supply_curves_0003 0.008
-    fuel_supply_curves_0004 0.008
-    fuel_supply_curves_0005 0.008
-    fuel_supply_curves_0006 0.008
-    fuel_supply_curves_0007 0.008
-    fuel_supply_curves_0008 0.008
-    fuel_supply_curves_0009 0.008
-    fuel_supply_curves_0010 0.008
-    fuel_supply_curves_0011 0.008
-    fuel_supply_curves_0012 0.008
-    fuel_supply_curves_0013 0.008
-    fuel_supply_curves_0014 0.008
-    fuel_supply_curves_0015 0.008
-    fuel_supply_curves_0016 0.008
-    fuel_supply_curves_0017 0.008
-    fuel_supply_curves_0018 0.008
-    fuel_supply_curves_0019 0.008
-    fuel_supply_curves_0020 0.008
-    fuel_supply_curves_0021 0.008
-    fuel_supply_curves_0022 0.008
-    fuel_supply_curves_0023 0.008
-    fuel_supply_curves_0024 0.008
-    fuel_supply_curves_0025 0.008
-    fuel_supply_curves_0026 0.008
-    fuel_supply_curves_0027 0.008
-    fuel_supply_curves_0028 0.008
-    fuel_supply_curves_0029 0.008
-    fuel_supply_curves_0030 0.008
-    fuel_supply_curves_0031 0.008
-    fuel_supply_curves_0032 0.008
-    fuel_supply_curves_0033 0.008
-    fuel_supply_curves_0034 0.008
-    fuel_supply_curves_0035 0.008
-    fuel_supply_curves_0036 0.008
-    fuel_supply_curves_0037 0.008
-    fuel_supply_curves_0038 0.008
-    fuel_supply_curves_0039 0.008
-    fuel_supply_curves_0040 0.008
-    fuel_supply_curves_0041 0.008
-    fuel_supply_curves_0042 0.008
-    fuel_supply_curves_0043 0.008
-    fuel_supply_curves_0044 0.008
-    fuel_supply_curves_0045 0.008
-    fuel_supply_curves_0046 0.008
-    fuel_supply_curves_0047 0.008
-    fuel_supply_curves_0048 0.008
-    fuel_supply_curves_0049 0.008
-    fuel_supply_curves_0050 0.008
-    fuel_supply_curves_0051 0.008
-    fuel_supply_curves_0052 0.008
-    fuel_supply_curves_0053 0.008
-    fuel_supply_curves_0054 0.008
-    fuel_supply_curves_0055 0.008
-    fuel_supply_curves_0056 0.008
-    fuel_supply_curves_0057 0.008
-    fuel_supply_curves_0058 0.008
-    fuel_supply_curves_0059 0.008
-    fuel_supply_curves_0060 0.008
-    fuel_supply_curves_0061 0.008
-    fuel_supply_curves_0062 0.008
-    fuel_supply_curves_0063 0.008
-    fuel_supply_curves_0064 0.008
-    fuel_supply_curves_0065 0.008
-    fuel_supply_curves_0066 0.008
-    fuel_supply_curves_0067 0.008
-    fuel_supply_curves_0068 0.008
-    fuel_supply_curves_0069 0.008
-    fuel_supply_curves_0070 0.008
-    fuel_supply_curves_0071 0.008
-    fuel_supply_curves_0072 0.008
-    fuel_supply_curves_0073 0.008
-    fuel_supply_curves_0074 0.008
-    fuel_supply_curves_0075 0.008
-    fuel_supply_curves_0076 0.008
-    fuel_supply_curves_0077 0.008
-    fuel_supply_curves_0078 0.008
-    fuel_supply_curves_0079 0.008
-    fuel_supply_curves_0080 0.008
-    fuel_supply_curves_0081 0.008
-    fuel_supply_curves_0082 0.008
-    fuel_supply_curves_0083 0.008
-    fuel_supply_curves_0084 0.008
-    fuel_supply_curves_0085 0.008
-    fuel_supply_curves_0086 0.008
-    fuel_supply_curves_0087 0.008
-    fuel_supply_curves_0088 0.008
-    fuel_supply_curves_0089 0.008
-    fuel_supply_curves_0090 0.008
-    fuel_supply_curves_0091 0.008
-    fuel_supply_curves_0092 0.008
-    fuel_supply_curves_0093 0.008
-    fuel_supply_curves_0094 0.008
-    fuel_supply_curves_0095 0.008
-    fuel_supply_curves_0096 0.008
-    fuel_supply_curves_0097 0.008
-    fuel_supply_curves_0098 0.008
-    fuel_supply_curves_0099 0.008
-    fuel_supply_curves_0100 0.008
-    fuel_supply_curves_0101 0.008
-    fuel_supply_curves_0102 0.008
-    fuel_supply_curves_0103 0.008
-    fuel_supply_curves_0104 0.008
-    fuel_supply_curves_0105 0.008
-    fuel_supply_curves_0106 0.008
-    fuel_supply_curves_0107 0.008
-    fuel_supply_curves_0108 0.008
-    fuel_supply_curves_0109 0.008
-    fuel_supply_curves_0110 0.008
-    fuel_supply_curves_0111 0.008
-    fuel_supply_curves_0112 0.008
-    fuel_supply_curves_0113 0.008
-    fuel_supply_curves_0114 0.008
-    fuel_supply_curves_0115 0.008
-    fuel_supply_curves_0116 0.008
-    fuel_supply_curves_0117 0.008
-    fuel_supply_curves_0118 0.008
-    fuel_supply_curves_0119 0.008
-    fuel_supply_curves_0120 0.008
-    fuel_supply_curves_0121 0.008
-    fuel_supply_curves_0122 0.008
-    fuel_supply_curves_0123 0.008
-    fuel_supply_curves_0124 0.008
+    fuel_supply_curves_0000 0.083034
+    fuel_supply_curves_0001 5e-06
+    fuel_supply_curves_0002 2.8e-05
+    fuel_supply_curves_0003 0.002401
+    fuel_supply_curves_0004 6.3e-05
+    fuel_supply_curves_0005 1e-06
+    fuel_supply_curves_0006 2.6e-05
+    fuel_supply_curves_0007 1.3e-05
+    fuel_supply_curves_0008 2e-06
+    fuel_supply_curves_0009 0.001008
+    fuel_supply_curves_0010 0.009207
+    fuel_supply_curves_0011 0.054148
+    fuel_supply_curves_0012 2e-06
+    fuel_supply_curves_0013 0.071904
+    fuel_supply_curves_0014 2.9e-05
+    fuel_supply_curves_0015 0.002845
+    fuel_supply_curves_0016 0.000478
+    fuel_supply_curves_0017 4e-06
+    fuel_supply_curves_0018 5e-05
+    fuel_supply_curves_0019 0.005995
+    fuel_supply_curves_0020 1.1e-05
+    fuel_supply_curves_0021 0.003555
+    fuel_supply_curves_0022 0.006136
+    fuel_supply_curves_0023 0.000437
+    fuel_supply_curves_0024 6.2e-05
+    fuel_supply_curves_0025 0.007935
+    fuel_supply_curves_0026 0.009637
+    fuel_supply_curves_0027 0.008167
+    fuel_supply_curves_0028 0.070419
+    fuel_supply_curves_0029 1.3e-05
+    fuel_supply_curves_0030 5e-06
+    fuel_supply_curves_0031 2e-06
+    fuel_supply_curves_0032 7.5e-05
+    fuel_supply_curves_0033 4.6e-05
+    fuel_supply_curves_0034 0.005267
+    fuel_supply_curves_0035 0.007742
+    fuel_supply_curves_0036 4.6e-05
+    fuel_supply_curves_0037 0.000306
+    fuel_supply_curves_0038 0.014131
+    fuel_supply_curves_0039 1.2e-05
+    fuel_supply_curves_0040 2.2e-05
+    fuel_supply_curves_0041 0.002591
+    fuel_supply_curves_0042 0.000152
+    fuel_supply_curves_0043 0.010673
+    fuel_supply_curves_0044 0.011049
+    fuel_supply_curves_0045 0.000903
+    fuel_supply_curves_0046 3e-06
+    fuel_supply_curves_0047 0.000145
+    fuel_supply_curves_0048 2e-05
+    fuel_supply_curves_0049 0.00883
+    fuel_supply_curves_0050 0.000622
+    fuel_supply_curves_0051 0.030308
+    fuel_supply_curves_0052 0.00038
+    fuel_supply_curves_0053 0.001987
+    fuel_supply_curves_0054 1.8e-05
+    fuel_supply_curves_0055 5.8e-05
+    fuel_supply_curves_0056 0.000134
+    fuel_supply_curves_0057 0.020202
+    fuel_supply_curves_0058 0.057011
+    fuel_supply_curves_0059 0.00611
+    fuel_supply_curves_0060 0.003936
+    fuel_supply_curves_0061 0.0001
+    fuel_supply_curves_0062 0.000336
+    fuel_supply_curves_0063 0.000816
+    fuel_supply_curves_0064 0.001232
+    fuel_supply_curves_0065 0.001741
+    fuel_supply_curves_0066 0.009587
+    fuel_supply_curves_0067 0.027564
+    fuel_supply_curves_0068 0.060576
+    fuel_supply_curves_0069 0.037885
+    fuel_supply_curves_0070 2e-06
+    fuel_supply_curves_0071 0.012167
+    fuel_supply_curves_0072 0.000897
+    fuel_supply_curves_0073 0.000591
+    fuel_supply_curves_0074 0.006331
+    fuel_supply_curves_0075 0.015466
+    fuel_supply_curves_0076 0.002682
+    fuel_supply_curves_0077 1.4e-05
+    fuel_supply_curves_0078 6.1e-05
+    fuel_supply_curves_0079 0.000255
+    fuel_supply_curves_0080 0.001328
+    fuel_supply_curves_0081 0.076778
+    fuel_supply_curves_0082 0.000116
+    fuel_supply_curves_0083 0.000856
+    fuel_supply_curves_0084 5.9e-05
+    fuel_supply_curves_0085 0.002378
+    fuel_supply_curves_0086 0.00188
+    fuel_supply_curves_0087 0.000115
+    fuel_supply_curves_0088 6.7e-05
+    fuel_supply_curves_0089 0.00143
+    fuel_supply_curves_0090 0.002926
+    fuel_supply_curves_0091 0.018357
+    fuel_supply_curves_0092 0.023634
+    fuel_supply_curves_0093 0.002445
+    fuel_supply_curves_0094 0.015689
+    fuel_supply_curves_0095 0.00494
+    fuel_supply_curves_0096 0.000795
+    fuel_supply_curves_0097 0.001006
+    fuel_supply_curves_0098 0.000179
+    fuel_supply_curves_0099 1.1e-05
+    fuel_supply_curves_0100 0.003587
+    fuel_supply_curves_0101 0.030276
+    fuel_supply_curves_0102 0.011448
+    fuel_supply_curves_0103 5.8e-05
+    fuel_supply_curves_0104 0.000131
+    fuel_supply_curves_0105 0.00016
+    fuel_supply_curves_0106 0.004767
+    fuel_supply_curves_0107 0.001532
+    fuel_supply_curves_0108 0.018304
+    fuel_supply_curves_0109 2.1e-05
+    fuel_supply_curves_0110 3.6e-05
+    fuel_supply_curves_0111 0.000406
+    fuel_supply_curves_0112 0.001573
+    fuel_supply_curves_0113 0.004354
+    fuel_supply_curves_0114 1e-06
+    fuel_supply_curves_0115 0.032834
+    fuel_supply_curves_0116 0.002298
+    fuel_supply_curves_0117 0.014994
+    fuel_supply_curves_0118 0.003952
+    fuel_supply_curves_0119 0.001694
+    fuel_supply_curves_0120 0.000452
+    fuel_supply_curves_0121 7e-06
+    fuel_supply_curves_0122 3.9e-05
+    fuel_supply_curves_0123 0.0132
+    fuel_supply_curves_0124 0.000183
 ;
 
 set Scenarios :=  
@@ -782,14 +782,15 @@ set StageVariables[Build] :=
     BuildLiquifierKgPerHour[*,*]
     BuildLiquidHydrogenTankKg[*,*]
     BuildFuelCellMW[*,*]
+    FuelConsumptionByTier[*,*,*]
+    FuelConsumptionInMarket[*,*]
+    OperateAES[*]
 ;
 
 set StageVariables[Operate] := 
     DumpPower[*,*]
     DispatchProj[*,*]
     ProjFuelUseRate[*,*,*]
-    FuelConsumptionByTier[*,*,*]
-    FuelConsumptionInMarket[*,*]
     BaseloadOperatingLevelForPeriod[*,*]
     ChargeEVs[*,*]
     PumpedHydroProjGenerateMW[*,*]
@@ -802,7 +803,7 @@ set StageVariables[Operate] :=
     WithdrawLiquidHydrogenKg[*,*]
     DispatchFuelCellMW[*,*]
     DemandResponse[*,*]
-    OperateAES[*]
+    UnservedLoad[*,*]
 ;
 
 param StageCostVariable := 

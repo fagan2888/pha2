@@ -699,3 +699,131 @@ RootNode:
         CostForRho: 910791.155934
         CanSlamToAnywhere: True
         SlammingPriority: 1
+    FuelConsumptionByTier[Hawaii_Diesel,2021,base]:
+        CostForRho: 201.741201401
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionByTier[Hawaii_LNG,2021,bulk]:
+        CostForRho: 126.56842804
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionByTier[Hawaii_Pellet-Biomass,2037,base]:
+        CostForRho: 94.5281105042
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionByTier[Hawaii_LNG,2037,container]:
+        CostForRho: 181.130401611
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionByTier[Hawaii_LSFO,2021,base]:
+        CostForRho: 159.497940063
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionByTier[Hawaii_Coal,2037,base]:
+        CostForRho: 22.7667322159
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionByTier[Hawaii_Biodiesel,2037,base]:
+        CostForRho: 270.985349655
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionByTier[Hawaii_LSFO-Diesel-Blend,2021,base]:
+        CostForRho: 176.395244598
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionByTier[Hawaii_Diesel,2037,base]:
+        CostForRho: 190.288417816
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionByTier[Hawaii_LNG,2037,bulk]:
+        CostForRho: 91.0164871216
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionByTier[Hawaii_Pellet-Biomass,2021,base]:
+        CostForRho: 151.68986702
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionByTier[Hawaii_LNG,2021,container]:
+        CostForRho: 271.174808502
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionByTier[Hawaii_LSFO,2037,base]:
+        CostForRho: 151.093447685
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionByTier[Hawaii_Coal,2021,base]:
+        CostForRho: 31.6331710815
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionByTier[Hawaii_Biodiesel,2021,base]:
+        CostForRho: 331.236087799
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionByTier[Hawaii_LSFO-Diesel-Blend,2037,base]:
+        CostForRho: 166.771435738
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionInMarket[Hawaii_Coal,2021]:
+        CostForRho: 1e-06
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionInMarket[Hawaii_Coal,2037]:
+        CostForRho: 1e-06
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionInMarket[Hawaii_LSFO-Diesel-Blend,2021]:
+        CostForRho: 1e-06
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionInMarket[Hawaii_LSFO-Diesel-Blend,2037]:
+        CostForRho: 1e-06
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionInMarket[Hawaii_Pellet-Biomass,2021]:
+        CostForRho: 1e-06
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionInMarket[Hawaii_Pellet-Biomass,2037]:
+        CostForRho: 1e-06
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionInMarket[Hawaii_Biodiesel,2021]:
+        CostForRho: 1e-06
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionInMarket[Hawaii_Biodiesel,2037]:
+        CostForRho: 1e-06
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionInMarket[Hawaii_LNG,2021]:
+        CostForRho: 1e-06
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionInMarket[Hawaii_LNG,2037]:
+        CostForRho: 1e-06
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionInMarket[Hawaii_Diesel,2021]:
+        CostForRho: 1e-06
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionInMarket[Hawaii_Diesel,2037]:
+        CostForRho: 1e-06
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionInMarket[Hawaii_LSFO,2021]:
+        CostForRho: 1e-06
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    FuelConsumptionInMarket[Hawaii_LSFO,2037]:
+        CostForRho: 1e-06
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    OperateAES[2021]:
+        CostForRho: 1e-06
+        CanSlamToAnywhere: True
+        SlammingPriority: 1
+    OperateAES[2037]:
+        CostForRho: 1e-06
+        CanSlamToAnywhere: True
+        SlammingPriority: 1

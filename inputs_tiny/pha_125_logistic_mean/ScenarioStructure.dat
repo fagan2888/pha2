@@ -38,14 +38,15 @@ set StageVariables[Build] :=
     BuildLiquifierKgPerHour[*,*]
     BuildLiquidHydrogenTankKg[*,*]
     BuildFuelCellMW[*,*]
+    FuelConsumptionByTier[*,*,*]
+    FuelConsumptionInMarket[*,*]
+    OperateAES[*]
 ;
 
 set StageVariables[Operate] := 
     DumpPower[*,*]
     DispatchProj[*,*]
     ProjFuelUseRate[*,*,*]
-    FuelConsumptionByTier[*,*,*]
-    FuelConsumptionInMarket[*,*]
     BaseloadOperatingLevelForPeriod[*,*]
     ChargeEVs[*,*]
     PumpedHydroProjGenerateMW[*,*]
@@ -58,7 +59,7 @@ set StageVariables[Operate] :=
     WithdrawLiquidHydrogenKg[*,*]
     DispatchFuelCellMW[*,*]
     DemandResponse[*,*]
-    OperateAES[*]
+    UnservedLoad[*,*]
 ;
 
 param StageCostVariable := 
