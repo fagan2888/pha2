@@ -183,10 +183,33 @@ run model
     # - get_scenario_data.py --write-rhos
     # - ReferenceModel.py
     # - tabulate_fuel_costs.py
-test runph with mean prices
+    
+// before running real pha: change pha.save_pha_dat_files to use scenario weights to set ConditionalProbability
+
+// find some way to standardize input file creation, like what's shown at the top of options.txt
+# write code to allow specifying a different options.txt file (or just directly specify extra arguments)
+# in an environment variable, to be used by ReferenceModel (e.g., to relax the psip for one model run)
+
+# get pha_bounds working, so I can evaluate results of previous runs (pha_bounds does the pinning)
+
+generate portfolios in a new way:
+  - diversify on ConvertToLNG
+  - diversify on % RE in 2021-45 (maybe just push RPS line up)
+  - diversify on biofuel dependence
+  - main choice: % fossil/biofuel vs. wind/solar
+  * all scenarios with LNG < oil automatically include a ConvertToLNG
+  * all scenarios with high oil prices in 2045 automatically avoid biodiesel
+  * so maybe we just diagnose the successful ones rather than pre-construct them?
+generate price curves in a new way:
+  - more realistic long-term correlation between oil and gas
+  - don't normally collapse either price?
+
+# test runph with mean prices
 find 125 best scenarios
-find best scenario for mean
+# find best scenario for mean
 test heco psip with all prices
+   - need a way to specify different command line options for different jobs via environment variables
+   - formerly had just include_module and exclude_module environment variables
 test all best scenarios with all prices
 graph cost vs. risk for all scenarios
 identify interesting questions -- what makes a solution low cost or low risk

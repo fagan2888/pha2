@@ -44,9 +44,10 @@ def set_standard_bounds(self, scenario_tree, scenario):
     # limit most variables to 3000 MW (only used to linearize progressive hedging quadratic term)
     build_var_limits = [
         ("BuildProj", 3000),
+        ("BuildUnits", 6),   # may not be needed since it's bound to BuildProj
         ("BuildBattery", 3000),
         ("BuildPumpedHydroMW", 300),  # may be redundant with tighter constraints already in place
-        # skip BuildAnyPumpedHydro, and RFMSupplyTierActivate because they are binary
+        # skip ConvertToLNG, BuildAnyPumpedHydro, and RFMSupplyTierActivate because they are binary
         ("BuildElectrolyzerMW", 3000),
         ("BuildLiquifierKgPerHour", 3000.0 * electrolyzer_kg_per_mwh),  # enough to consume 3000 MW
         ("BuildLiquidHydrogenTankKg", 1500 * 8760 / fuel_cell_mwh_per_kg), # enough to produce 1500 MW for 1 y

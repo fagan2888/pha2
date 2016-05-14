@@ -279,17 +279,11 @@ else:
         np.save(f, locals()[var])
 
 # process the scenario data
-
 oil_price_traj = mu[:,:len(periods)]    # first half of mu
 gas_price_traj = mu[:,-len(periods):]   # second half of mu
 traj_weight = np.bincount(cluster_id)/cluster_id.shape[0]
 # print traj_weight
 
-# # calculate quantiles for analysis
-# mu_sort_idx = np.argsort(mu, axis=0)
-# mu_col_idx = np.arange(mu.shape[1])
-# mu_sort = mu[mu_sort_idx, mu_col_idx]
-# mu_rank = np.cumsum(traj_weight[mu_sort_idx], axis=0) - 0.5 * traj_weight[mu_sort_idx]
 # for rank in [0.1, 0.25, 0.5, 0.75, 0.9]:
 #     # plot quantiles or save in a file...
 #     for c in mu.shape[1]:
@@ -298,6 +292,48 @@ traj_weight = np.bincount(cluster_id)/cluster_id.shape[0]
 def plot():
     import matplotlib.pyplot as plt
     from mpl_toolkits.mplot3d import Axes3D     # magic to activate 3d axes
+
+    # calculate quantiles for analysis
+    mu_sort_idx = np.argsort(mu, axis=0)
+    mu_col_idx = np.arange(mu.shape[1])
+    mu_sort = mu[mu_sort_idx, mu_col_idx]
+    mu_rank = np.cumsum(traj_weight[mu_sort_idx], axis=0) - 0.5 * traj_weight[mu_sort_idx]
+    fig = plt.figure()
+    ax = fig.gca()
+    lines = []
+    labels = []
+    ranks = np.linspace(0.05, 0.95, 91)
+    for c in range(mu.shape[1]):
+        quantiles = np.interp(x=ranks, xp=mu_rank[:,c], fp=mu_sort[:,c])
+        line, = ax.plot(ranks, quantiles, '.-')
+        lines.append(line)
+        labels.append(['oil', 'gas'][int(c/4)] + ' ' + str(int(periods[c%4])))
+#     ax.set_ylim([0, 100])
+    plt.legend(lines, labels, loc=2)
+    fig.show()
+
+    # calculate quantiles for analysis
+    low = np.min(np.stack([mu[:,:4], mu[:,-4:]], axis=2), axis=2)
+    low_sort_idx = np.argsort(low, axis=0)
+    low_col_idx = np.arange(low.shape[1])
+    low_sort = low[low_sort_idx, low_col_idx]
+    low_rank = np.cumsum(traj_weight[low_sort_idx], axis=0) - 0.5 * traj_weight[low_sort_idx]
+    fig = plt.figure()
+    ax = fig.gca()
+    lines = []
+    labels = []
+    ranks = np.linspace(0.05, 0.95, 91)
+    for c in range(low.shape[1]):
+        quantiles = np.interp(x=ranks, xp=low_rank[:,c], fp=low_sort[:,c])
+        line, = ax.plot(ranks, quantiles, '.-')
+        lines.append(line)
+        labels.append('min(oil, gas) ' + str(int(periods[c%4])))
+#     ax.set_ylim([0, 100])
+    plt.legend(lines, labels, loc=2)
+    fig.show()
+
+
+
 
     # show all the clusters
     fig = plt.figure()

@@ -2,6 +2,7 @@
 *.err
 *.mem
 *_bak.tsv
+~$*.xlsx
 progress*.txt
 switch-hawaii-core/
 switch/
