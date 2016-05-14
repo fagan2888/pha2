@@ -1,20 +1,22 @@
 # To use: 
-# "python get_scenario_data.py --write-rhos" to create inputs dir, basic inputs and rho files
-# "python get_pha_data_monthly_logistic.py" to create pha subdir and scenario data
-# "python tabulate_fuel_costs.py" to create a '_mean' pha subdir and scenario data
-# cp inputs/pha_125_logistic/fuel_cost_curves_mean.dat inputs/pha_125_logistic_mean/fuel_cost_curves.tab
-# change --inputs-dir and --pha-subdir when calling ReferenceModel to refer to the data you want to use
-# "python ReferenceModel.py" to create .dat files in pha subdir
-# use runph with various options to solve the model (note: it will only use model config options from options.txt, not command line)
+# "python get_scenario_data.py --write-rhos" to create inputs dir, basic inputs and rho files in all inputs dirs
+# "python write_wwph_suffixes.py" to create suffixes files in all inputs dirs
+# Run the following command twice with different input_dir variables to create pha and pha_mean subdirs and scenario data
+# "python get_pha_data_monthly_logistic.py"
+# "cp inputs/pha_125_logistic_mean/fuel_cost_curves.tab inputs"
+# "cp inputs_tiny/pha_125_logistic_mean/fuel_cost_curves.tab inputs_tiny"
+# create root and tree .dat files in pha and pha_mean subdirs:
+# "python ReferenceModel.py --inputs-dir inputs --pha-subdir pha_125_logistic"
+# "python ReferenceModel.py --inputs-dir inputs_tiny --pha-subdir pha_125_logistic"
+# use runph with various options to solve the model (note: it will not use command line arguments
+# so all model configuration must be done with options.txt or the USE_PSIP_PLAN environment variable)
 # use summarize_scenario_results_01_99.py or summarize_scenario_results.py to get statistics 
 # for all the model runs
-# note: everything above except ReferenceModel and runph have their own inputs-dir 
-# and pha-subdir variables that have to be changed before running them. (This could
-# be simplified by having them use switch_mod.solve.get_option_file_args and doing 
-# some argument parsing.) (Maybe everything before runph could be moved into get_scenario_data.py.)
 
---inputs-dir inputs_tiny
+--inputs-dir inputs
 --pha-subdir pha_125_logistic
+# must be set when running ReferenceModel.py to create ScenarioStructure.dat
+--pha-scenario-count 125
 --demand-response-share 0.103
 --biofuel-limit 1.0
 --psip-relax

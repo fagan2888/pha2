@@ -1,4 +1,6 @@
+import os
 from pyomo.environ import *
+import pha
 
 def define_arguments(argparser):
     argparser.add_argument('--psip-relax', action='store_true', default=False, 
@@ -9,7 +11,24 @@ def define_components(m):
     # resource rules to match HECO's 2016-04-01 PSIP
     ##################
     
-    psip = not m.options.psip_relax
+    # decide whether to enforce the PSIP preferred plan
+    # if an environment variable is set, that takes precedence 
+    # (e.g., on a cluster to override options.txt)
+    psip_env_var = os.environ.get('USE_PSIP_PLAN')
+    if psip_env_var is None:
+        # no environment variable; use the --psip-relax flag
+        psip = m.options.psip_relax
+    elif psip_env_var.lower() in ["1", "true", "y", "yes", "on"]:
+        psip = True
+    elif psip_env_var.lower() in ["0", "false", "n", "no", "off"]:
+        psip = False
+    else:
+        raise ValueError('Unrecognized value for environment variable USE_PSIP_PLAN={} (should be 0 or 1)'.format(psip_env_var))
+
+    if psip:
+        print "Using PSIP construction plan."
+    else:
+        print "Relaxing PSIP construction plan."
     
     # force conversion to LNG in 2021
     # force use of containerized LNG
@@ -186,16 +205,16 @@ def define_components(m):
         #         Constraint.Skip
         # )
         
-        # # force LNG conversion in 2021 (modeled on similar constraint in lng_conversion.py)
-        # # This could have extra code to skip the constraint if there are no periods after 2021,
-        # # but it is unlikely ever to be run that way.
-        # # Note: this is not needed if some plants are forced to run on LNG
-        # m.PSIP_Force_LNG_Conversion = Constraint(m.LOAD_ZONES, rule=lambda m, z:
-        #         m.ConvertToLNG[
-        #             z,
-        #             min(per for per in m.PERIODS if per + m.period_length_years[per] > 2021)
-        #         ] == 1
-        #     )
+        # force LNG conversion in 2021 (modeled on similar constraint in lng_conversion.py)
+        # This could have extra code to skip the constraint if there are no periods after 2021,
+        # but it is unlikely ever to be run that way.
+        # Note: this is not needed if some plants are forced to run on LNG
+        m.PSIP_Force_LNG_Conversion = Constraint(m.LOAD_ZONES, rule=lambda m, z:
+                m.ConvertToLNG[
+                    z,
+                    min(per for per in m.PERIODS if per + m.period_length_years[per] > 2021)
+                ] == 1
+            )
         
         # # Kahe 5, Kahe 6, Kalaeloa and CC_383 only burn LNG after 2021
         # # This is not used because it creates a weird situation where HECO runs less-efficient non-LNG
@@ -209,13 +228,11 @@ def define_components(m):
         #     else
         #         Constraint.Skip
         # )
-  
-        # don't allow construction of any advanced technologies
+
+        # don't allow construction of any advanced technologies (e.g., batteries, pumped hydro, fuel cells)
         advanced_tech_vars = [
-            "BuildBattery",
-            "BuildPumpedHydroMW", "BuildAnyPumpedHydro",
-            "BuildElectrolyzerMW", "BuildLiquifierKgPerHour", "BuildLiquidHydrogenTankKg",
-            "BuildFuelCellMW"
+            t for t in pha.build_vars 
+                if t not in {"BuildProj", "BuildUnits", "ConvertToLNG", "RFMSupplyTierActivate"}
         ]
         def no_advanced_tech_rule_factory(v):
             return lambda m, *k: (getattr(m, v)[k] == 0)

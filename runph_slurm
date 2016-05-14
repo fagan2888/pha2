@@ -10,6 +10,19 @@ HOSTNAME=$(hostname)    # sometimes HOSTNAME seems to inherit from the submittin
 source ~/.bash_profile
 module load lang/Python/2.7.10/python
 
+start_pyomo_ns ()
+{
+    # sometimes the port is still in use by the process that first identified it as free,
+    # so we repeatedly try to start a pyro name server at the specified port until it works
+    while true
+    do
+        echo "Launching pyomo_ns on port $nsp..."
+        pyomo_ns -p $nsp -b $nsp -m && break
+        echo "pyomo_ns exited with error; launching again in 2 seconds"
+        sleep 2
+    done
+}
+
 await_pyomo_ns ()
 { 
     # wait for a pyro name server to be found successfully at the specified port
@@ -74,8 +87,8 @@ fi
 
 if ((coordinator_reserved_slots < 1))
 then
-    echo WARNING: coordinator_reserved_slots was not set; using 1. This may not be enough for large models.
-    coordinator_reserved_slots=1  ## hold at least 1 slot for the coordinator (usually need more)
+    echo "WARNING: coordinator_reserved_slots was not set; using 0. This may not be enough for large models."
+    coordinator_reserved_slots=0  ## hold no slots for the coordinator (usually need more than 1)
 fi
 
 # This runs the runph command and name server on the first node, and reserves a total of
@@ -92,7 +105,7 @@ if ((SLURM_NODEID == 0 )) && ((node_task_num == 0)); then
     if ((SLURM_PROCID == 0)); then
         # this is usually task 0 but may not be guaranteed to be
         echo "Starting pyomo_ns and runph in task $task_id on host $(hostname)"
-        pyomo_ns -p $nsp -b $nsp -m &
+        start_pyomo_ns &
         await_pyomo_ns
         # use eval instead of $cmd to expand arguments correctly, 
         # even if they are quoted strings with spaces

@@ -85,9 +85,13 @@ with open("outputs/summary_all_scenarios_weighted.tsv", "w") as f:
     for tag, group in builds:
         # write a row for each scenario in each group, sorted by scenario name (number)
         for scenario in sorted(build_scenarios[group].keys()):
-            f.write("\t".join(
-                [group, scenario]
-                + [str(results_mean[group, scenario][key]) for key in keys]
-                + [str(results_05[group, scenario][key]) for key in keys]
-                + [str(results_95[group, scenario][key]) for key in keys]
-            ) + "\n")
+            try:
+                f.write("\t".join(
+                    [group, scenario]
+                    + [str(results_mean[group, scenario][key]) for key in keys]
+                    + [str(results_05[group, scenario][key]) for key in keys]
+                    + [str(results_95[group, scenario][key]) for key in keys]
+                ) + "\n")
+            except KeyError:
+                print "WARNING: KeyError for results_xx[{g}, {s}][{k}].".format(g=group, s=scenario, k=key)
+                f.write('\t'.join([group, scenario, 'MISSING DATA']) + '\n')

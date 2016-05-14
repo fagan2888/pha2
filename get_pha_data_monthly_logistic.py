@@ -17,6 +17,7 @@ except ImportError:
 # get_scenario_data.py should already have been run, creating a folder with standard inputs
 inputs_dir = "inputs"
 pha_dir = os.path.join(inputs_dir, "pha_125_logistic")
+pha_mean_dir = pha_dir + '_mean'
 n_scenarios = 1000000
 
 n_digits = 4 # len(str(n_scenarios-1))  # how many leading zeros to use for scenario names
@@ -118,6 +119,8 @@ def trunc_logistic(quantiles, mean, std):
 
 if not os.path.exists(pha_dir):
     os.makedirs(pha_dir)
+if not os.path.exists(pha_mean_dir):
+    os.makedirs(pha_mean_dir)
 
 # read standard data
 with open(os.path.join(inputs_dir, "fuel_supply_curves.tab")) as f:
@@ -387,6 +390,7 @@ def plot():
 # print "gas_prices"
 # print gas_prices
 
+# dictionary, with an array for each fuel supply tier, with 1 row for each year, 1 col for each scenario
 fuel_prices = {
     (fuel, tier): om * oil_price_traj.T + gm * gas_price_traj.T + a 
         for (fuel, tier), (om, gm, a) in price_factors.iteritems()
@@ -430,19 +434,37 @@ for s in range(n_trajectories):
             f.write('\t'.join(sort_cols(r)) + '\n')
         f.write(';\n')
 
+# write all values to a .tsv file for graphing (not really used anymore)
+with open(os.path.join(pha_dir, "fuel_supply_costs.tsv"), "w") as f:
+    f.write("fuel\tyear\t" + "\t".join("price_per_mmbtu_"+str(s).zfill(n_digits) for s in range(n_trajectories)) + '\n')
+    f.write('weight\t\t' + '\t'.join(traj_weight.astype(str).tolist()) + '\n')
+    for fuel, tier in sorted(fuel_prices.keys()):
+        for i, year in enumerate(periods):
+            f.write('\t'.join([fuel, str(year)] + fuel_prices[fuel, tier][i].astype(str).tolist()) + '\n')
+
+# write mean values to a tab file, dat file and tsv file
 traj_weight_row = traj_weight[np.newaxis, :]
-# write mean values to a standard tab file
-with open(os.path.join(pha_dir, "fuel_supply_curves_mean.tab"), "w") as f:
+fuel_data = []
+for row in standard_fuel_costs:
+    # columns: 
+    # regional_fuel_market, fuel, period, tier, unit_cost, max_avail_at_cost, fixed_cost
+    r = list(row)   # copy the existing list before changing, or convert tuple to list
+    if (r[1], r[3]) in fuel_prices:
+        traj_prices = fuel_prices[r[1], r[3]][periods.index(float(r[2])), :]
+        mean_price = np.sum(traj_prices * traj_weight_row, axis=1)[0]
+        r[4] = str(mean_price)
+    fuel_data.append(r)
+with open(os.path.join(pha_mean_dir, "fuel_supply_curves.tab"), "w") as f:
     f.write('\t'.join(headers)+'\n')
-    for row in standard_fuel_costs:
-        # columns: 
-        # regional_fuel_market, fuel, period, tier, unit_cost, max_avail_at_cost, fixed_cost
-        r = list(row)   # copy the existing list before changing, or convert tuple to list
-        if (r[1], r[3]) in fuel_prices:
-            traj_prices = fuel_prices[r[1], r[3]][periods.index(float(r[2])), :]
-            mean_price = np.sum(traj_prices * traj_weight_row, axis=1)[0]
-            r[4] = str(mean_price)
-        f.write('\t'.join(r)+'\n')
+    f.writelines('\t'.join(r)+'\n' for r in fuel_data)
+with open(
+    os.path.join(pha_mean_dir, "fuel_supply_curves_{s}.dat".format(s='0'.zfill(n_digits))),
+    "w"
+) as f:
+    # omit headers for index cols
+    f.write('param: ' + '\t'.join(translate_cols(sort_cols(headers)[3:])) + ' :=\n')
+    f.writelines('\t'.join(sort_cols(r))+'\n' for r in fuel_data)
+    f.write(';\n')
 
 # write the weights for each scenario
 with open(os.path.join(pha_dir, "scenario_weights.tsv"), "w") as f:
