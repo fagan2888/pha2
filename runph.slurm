@@ -35,7 +35,7 @@
 #export workers_per_node=20  # number of slots to use for workers on each node (could be reduced to conserve RAM)
 #export runph_cmd='runph --phpyro-required-workers=117 --instance-directory=inputs/pha_117 --rho-cfgfile=callbacks --user-defined-extension=callbacks --verbose --enable-ww-extensions --ww-extension-cfgfile=wwph_slam.cfg --ww-extension-suffixfile=inputs/wwph_slam.suffixes --default-rho=100000000 --termdiff-threshold=0.001 --linearize-nonbinary-penalty-terms=7 --breakpoint-strategy=1 --solver-manager=phpyro --shutdown-pyro --pyro-port=$nsp --solver=cplexamp --scenario-solver-options="threads=1" --model-directory=. --traceback --max-iterations=1 --bounds-cfgfile=pha_bounds_cfg.py'
 
-# # large memory: fails with errors run once with jobid ()
+# # large memory: fails with errors
 # #SBATCH --mem-per-cpu=25000
 # #SBATCH --job-name=ph125evl
 # #SBATCH --partition=lm.q
@@ -51,32 +51,32 @@
 # export USE_PSIP_PLAN=0
 
 
-# evaluate quality of previous solutions
-# TODO: run 125 times with best single solution for each scenario (540419< 540420< 540423<)(lots of errors but still running?)
-# TODO: run once for HECO PSIP Preferred Plan (540421<done 540422pd) (540400<shutdown without saving)
-# TODO: run once for optimal plan with mean prices (540408<err-infeasible and 540409<infeasible)
-#SBATCH --job-name=ph125evl
-##SBATCH --partition=kill.q
-##SBATCH --time=2-00:00:00
-#SBATCH --partition=community.q
-#SBATCH --time=2-00:00:00
-#SBATCH --nodes=7
-#SBATCH --tasks-per-node=20
-#SBATCH --dependency=afterok:540397
-export coordinator_reserved_slots=15  # number of slots to reserve for the coordinator processes on the first node
-export workers_per_node=20  # number of slots to use for workers on each node (could be reduced to conserve RAM)
-export runph_cmd='runph --phpyro-required-workers=125 --instance-directory=inputs/pha_125_logistic --disable-xhat-computation --rho-cfgfile=callbacks --user-defined-extension=callbacks --default-rho=100000000 --termdiff-threshold=0.001 --linearize-nonbinary-penalty-terms=7 --breakpoint-strategy=1 --solver-manager=phpyro --shutdown-pyro --pyro-port=$nsp --solver=cplexamp --scenario-solver-options="threads=1" --model-directory=. --traceback --max-iterations=0 --bounds-cfgfile=pha_bounds_cfg.py'
-export PHA_WRITE_SCENARIO_SUMMARY=1
-# # pin the build variables to plan from a particular run or runs (used by pha_bounds_cfg.py)
-# # best solution to 125 separate prices
-export PHA_FIX_BUILD_VARS_FILES=outputs/build_540397_iter0_Scenario_*.tsv
-export USE_PSIP_PLAN=0
-# # HECO PSIP
-# export USE_PSIP_PLAN=1
-# export PHA_FIX_BUILD_VARS_FILE=outputs/build_540396_iter0_Scenario_0000.tsv
-# best solution for average prices
-# export PHA_FIX_BUILD_VARS_FILE=outputs/build_540398_iter0_Scenario_0000.tsv
+# # evaluate quality of previous solutions
+# # TODO: run 125 times with best single solution for each scenario (540419< 540420< 540423<)(lots of errors but still running?)
+# # TODO: run once for HECO PSIP Preferred Plan (540421<done 540422pd) (540400<shutdown without saving)
+# # TODO: run once for optimal plan with mean prices (540408<err-infeasible and 540409<infeasible)
+# #SBATCH --job-name=ph125evl
+# ##SBATCH --partition=kill.q
+# ##SBATCH --time=2-00:00:00
+# #SBATCH --partition=community.q
+# #SBATCH --time=2-00:00:00
+# #SBATCH --nodes=7
+# #SBATCH --tasks-per-node=20
+# #SBATCH --dependency=afterok:540397
+# export coordinator_reserved_slots=15  # number of slots to reserve for the coordinator processes on the first node
+# export workers_per_node=20  # number of slots to use for workers on each node (could be reduced to conserve RAM)
+# export runph_cmd='runph --phpyro-required-workers=125 --instance-directory=inputs/pha_125_logistic --disable-xhat-computation --rho-cfgfile=callbacks --user-defined-extension=callbacks --default-rho=100000000 --termdiff-threshold=0.001 --linearize-nonbinary-penalty-terms=7 --breakpoint-strategy=1 --solver-manager=phpyro --shutdown-pyro --pyro-port=$nsp --solver=cplexamp --scenario-solver-options="threads=1" --model-directory=. --traceback --max-iterations=0 --bounds-cfgfile=pha_bounds_cfg.py'
+# export PHA_WRITE_SCENARIO_SUMMARY=1
+# # # pin the build variables to plan from a particular run or runs (used by pha_bounds_cfg.py)
+# # # best solution to 125 separate prices
+# export PHA_FIX_BUILD_VARS_FILES=outputs/build_540397_iter0_Scenario_*.tsv
 # export USE_PSIP_PLAN=0
+# # # HECO PSIP
+# # export USE_PSIP_PLAN=1
+# # export PHA_FIX_BUILD_VARS_FILE=outputs/build_540396_iter0_Scenario_0000.tsv
+# # best solution for average prices
+# # export PHA_FIX_BUILD_VARS_FILE=outputs/build_540398_iter0_Scenario_0000.tsv
+# # export USE_PSIP_PLAN=0
 
 # # one solution for each scenario
 # #SBATCH --job-name=ph125gen
@@ -116,19 +116,19 @@ export USE_PSIP_PLAN=0
 # export PHA_WRITE_SCENARIO_SUMMARY=1
 # export PHA_WRITE_ITER0_SCENARIO_BUILDS=1
 
-# # one solution, for the PSIP preferred plan
-# #SBATCH --job-name=psip
-# #SBATCH --partition=kill.q
-# #SBATCH --time=0-01:00:00
-# #SBATCH --nodes=1
-# #SBATCH --tasks-per-node=2
-# export coordinator_reserved_slots=1  # number of slots to reserve for the coordinator processes on the first node
-# export workers_per_node=2  # number of slots to use for workers on each node (could be reduced to conserve RAM)
-# export runph_cmd='runph --phpyro-required-workers=1 --instance-directory=inputs/pha_125_logistic_mean --user-defined-extension=callbacks --verbose --default-rho=100000000 --termdiff-threshold=0.001 --solver-manager=phpyro --shutdown-pyro --pyro-port=$nsp --solver=cplexamp --scenario-solver-options="threads=1" --model-directory=. --traceback --max-iterations=0'
-# echo ========= running PSIP scenario with mean prices ============
-# export USE_PSIP_PLAN=1
-# export PHA_WRITE_SCENARIO_SUMMARY=1
-# export PHA_WRITE_ITER0_SCENARIO_BUILDS=1
+# one solution, for the PSIP preferred plan
+#SBATCH --job-name=psip
+#SBATCH --partition=kill.q
+#SBATCH --time=0-01:00:00
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=2
+export coordinator_reserved_slots=1  # number of slots to reserve for the coordinator processes on the first node
+export workers_per_node=2  # number of slots to use for workers on each node (could be reduced to conserve RAM)
+export runph_cmd='runph --phpyro-required-workers=1 --instance-directory=inputs/pha_125_logistic_mean --user-defined-extension=callbacks --verbose --default-rho=100000000 --termdiff-threshold=0.001 --solver-manager=phpyro --shutdown-pyro --pyro-port=$nsp --solver=cplexamp --scenario-solver-options="threads=1" --model-directory=. --traceback --max-iterations=0'
+echo ========= running PSIP scenario with mean prices ============
+export USE_PSIP_PLAN=1
+export PHA_WRITE_SCENARIO_SUMMARY=1
+export PHA_WRITE_ITER0_SCENARIO_BUILDS=1
 
 ##SBATCH --job-name=phtiny
 ##SBATCH --partition=sb.q

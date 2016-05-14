@@ -15,7 +15,7 @@ except ImportError:
     raise
 
 # get_scenario_data.py should already have been run, creating a folder with standard inputs
-inputs_dir = "inputs"
+inputs_dir = "inputs_tiny"
 pha_dir = os.path.join(inputs_dir, "pha_125_logistic")
 pha_mean_dir = pha_dir + '_mean'
 n_scenarios = 1000000

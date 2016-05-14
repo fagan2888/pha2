@@ -17,7 +17,7 @@ def define_components(m):
     psip_env_var = os.environ.get('USE_PSIP_PLAN')
     if psip_env_var is None:
         # no environment variable; use the --psip-relax flag
-        psip = m.options.psip_relax
+        psip = not m.options.psip_relax
     elif psip_env_var.lower() in ["1", "true", "y", "yes", "on"]:
         psip = True
     elif psip_env_var.lower() in ["0", "false", "n", "no", "off"]:
@@ -231,9 +231,11 @@ def define_components(m):
 
         # don't allow construction of any advanced technologies (e.g., batteries, pumped hydro, fuel cells)
         advanced_tech_vars = [
-            t for t in pha.build_vars 
-                if t not in {"BuildProj", "BuildUnits", "ConvertToLNG", "RFMSupplyTierActivate"}
-        ]
+            "BuildBattery", 
+            "BuildPumpedHydroMW", "BuildAnyPumpedHydro",
+            "BuildElectrolyzerMW", "BuildLiquifierKgPerHour", "BuildLiquidHydrogenTankKg",
+            "BuildFuelCellMW",
+        ]    
         def no_advanced_tech_rule_factory(v):
             return lambda m, *k: (getattr(m, v)[k] == 0)
         for v in advanced_tech_vars:

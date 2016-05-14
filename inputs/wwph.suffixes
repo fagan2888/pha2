@@ -6493,3 +6493,131 @@ RootNode:
         CostForRho: 910791.155935
     BuildFuelCellMW[Oahu,2045]:
         CostForRho: 401801.295779
+    FuelConsumptionByTier[Hawaii_LNG,2037,container]:
+        CostForRho: 101.223575592
+    FuelConsumptionByTier[Hawaii_Biodiesel,2037,base]:
+        CostForRho: 151.438444138
+    FuelConsumptionByTier[Hawaii_LSFO,2029,base]:
+        CostForRho: 86.5270271301
+    FuelConsumptionByTier[Hawaii_Diesel,2037,base]:
+        CostForRho: 106.341475487
+    FuelConsumptionByTier[Hawaii_Coal,2021,base]:
+        CostForRho: 17.6779966354
+    FuelConsumptionByTier[Hawaii_LNG,2021,bulk]:
+        CostForRho: 70.7319631577
+    FuelConsumptionByTier[Hawaii_LSFO,2045,base]:
+        CostForRho: 81.7775020599
+    FuelConsumptionByTier[Hawaii_Diesel,2021,base]:
+        CostForRho: 112.741790771
+    FuelConsumptionByTier[Hawaii_LSFO-Diesel-Blend,2029,base]:
+        CostForRho: 95.5050735474
+    FuelConsumptionByTier[Hawaii_Coal,2037,base]:
+        CostForRho: 12.7230434418
+    FuelConsumptionByTier[Hawaii_LNG,2029,container]:
+        CostForRho: 122.770528793
+    FuelConsumptionByTier[Hawaii_LNG,2037,bulk]:
+        CostForRho: 50.863986969
+    FuelConsumptionByTier[Hawaii_Biodiesel,2045,base]:
+        CostForRho: 135.24598217
+    FuelConsumptionByTier[Hawaii_LNG,2045,container]:
+        CostForRho: 85.4884347916
+    FuelConsumptionByTier[Hawaii_Biodiesel,2029,base]:
+        CostForRho: 166.099633217
+    FuelConsumptionByTier[Hawaii_Pellet-Biomass,2037,base]:
+        CostForRho: 52.8264350891
+    FuelConsumptionByTier[Hawaii_LSFO-Diesel-Blend,2021,base]:
+        CostForRho: 98.5773630142
+    FuelConsumptionByTier[Hawaii_LSFO,2021,base]:
+        CostForRho: 89.1344118118
+    FuelConsumptionByTier[Hawaii_Pellet-Biomass,2021,base]:
+        CostForRho: 84.7709188461
+    FuelConsumptionByTier[Hawaii_LSFO-Diesel-Blend,2037,base]:
+        CostForRho: 93.1991596222
+    FuelConsumptionByTier[Hawaii_LSFO,2037,base]:
+        CostForRho: 84.4376153946
+    FuelConsumptionByTier[Hawaii_Pellet-Biomass,2029,base]:
+        CostForRho: 66.9189462662
+    FuelConsumptionByTier[Hawaii_Diesel,2045,base]:
+        CostForRho: 99.6460189819
+    FuelConsumptionByTier[Hawaii_Coal,2029,base]:
+        CostForRho: 15.1391248703
+    FuelConsumptionByTier[Hawaii_LSFO-Diesel-Blend,2045,base]:
+        CostForRho: 88.924908638
+    FuelConsumptionByTier[Hawaii_Diesel,2029,base]:
+        CostForRho: 108.97214222
+    FuelConsumptionByTier[Hawaii_LNG,2045,bulk]:
+        CostForRho: 45.7341089249
+    FuelConsumptionByTier[Hawaii_Biodiesel,2021,base]:
+        CostForRho: 185.109186172
+    FuelConsumptionByTier[Hawaii_Coal,2045,base]:
+        CostForRho: 10.7237462997
+    FuelConsumptionByTier[Hawaii_LNG,2021,container]:
+        CostForRho: 151.544320107
+    FuelConsumptionByTier[Hawaii_LNG,2029,bulk]:
+        CostForRho: 58.9765081406
+    FuelConsumptionByTier[Hawaii_Pellet-Biomass,2045,base]:
+        CostForRho: 41.701675415
+    FuelConsumptionInMarket[Hawaii_Coal,2021]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_Coal,2029]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_Coal,2037]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_Coal,2045]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_LSFO-Diesel-Blend,2021]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_LSFO-Diesel-Blend,2029]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_LSFO-Diesel-Blend,2037]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_LSFO-Diesel-Blend,2045]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_Pellet-Biomass,2021]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_Pellet-Biomass,2029]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_Pellet-Biomass,2037]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_Pellet-Biomass,2045]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_Biodiesel,2021]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_Biodiesel,2029]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_Biodiesel,2037]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_Biodiesel,2045]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_LNG,2021]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_LNG,2029]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_LNG,2037]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_LNG,2045]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_Diesel,2021]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_Diesel,2029]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_Diesel,2037]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_Diesel,2045]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_LSFO,2021]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_LSFO,2029]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_LSFO,2037]:
+        CostForRho: 1e-06
+    FuelConsumptionInMarket[Hawaii_LSFO,2045]:
+        CostForRho: 1e-06
+    OperateAES[2029]:
+        CostForRho: 1e-06
+    OperateAES[2021]:
+        CostForRho: 1e-06
+    OperateAES[2045]:
+        CostForRho: 1e-06
+    OperateAES[2037]:
+        CostForRho: 1e-06

@@ -14,8 +14,14 @@ build_vars = [
     "BuildPumpedHydroMW", "BuildAnyPumpedHydro",
     "RFMSupplyTierActivate",
     "BuildElectrolyzerMW", "BuildLiquifierKgPerHour", "BuildLiquidHydrogenTankKg",
-    "BuildFuelCellMW"
+    "BuildFuelCellMW",
+    # we assume that we are committing in advance to contracts to use a certain amount of each fuel
+    "FuelConsumptionByTier", "FuelConsumptionInMarket",
+    "OperateAES",
 ]
+# At this point, there aren't actually any free decisions left for the operating stage,
+# but we run as if there are, for simplicity (i.e., to avoid listing every var here)
+# It's possible this will cause infeasibilities, since the model is tightly constrained.
 
 n_digits = 4    # zero-padding in existing file names and scenario names
 
@@ -54,10 +60,22 @@ def save_pha_dat_files(m):
     save_root_node_file(m, main_dir)
     save_root_node_file(m, mean_dir)
     scenarios = [str(i).zfill(n_digits) for i in range(n_scenarios)]
+    weight_file = os.path.join(dat_file_dir(m), 'scenario_weights.tsv')
+    if os.path.exists(weight_file):
+        with open(weight_file, "r") as f:
+            strs = [r.split("\t") for r in f.read().strip().split('\n')[1:]]
+        weight_dict = {int(scen): float(wgt) for scen, wgt in strs}
+        weights = [weight_dict[i] for i in range(n_scenarios)]
+    else:
+        # spread evenly among all scenarios
+        weights = [1.0/len(scenarios)] * (len(scenarios) - 1)
+        # lump the remainder into the last scenario
+        weights.append(1.0 - sum(weights))
+    
     # save the main structure file
-    save_scenario_structure_file(m, main_dir, scenarios)
+    save_scenario_structure_file(m, main_dir, scenarios, weights)
     # save a 1-scenario file in the _mean directory
-    save_scenario_structure_file(m, mean_dir, scenarios[0])
+    save_scenario_structure_file(m, mean_dir, scenarios[:1], [1.0])
 
 def save_root_node_file(m, file_dir):
     dat_file = os.path.join(file_dir, "RootNode.dat")
@@ -67,7 +85,7 @@ def save_root_node_file(m, file_dir):
         exclude=["rfm_supply_tier_cost", "rfm_supply_tier_limit", "rfm_supply_tier_fixed_cost"]
     )
     
-def save_scenario_structure_file(m, file_dir, scenarios):
+def save_scenario_structure_file(m, file_dir, scenarios, weights):
 
     dat_file = os.path.join(file_dir, "ScenarioStructure.dat")
     print "saving {}...".format(dat_file)
@@ -93,9 +111,7 @@ def save_scenario_structure_file(m, file_dir, scenarios):
         f.write(";\n\n")
     
         f.write("param ConditionalProbability := RootNode 1.0\n")
-        probs = [1.0/n_scenarios] * (n_scenarios - 1) # evenly spread among all scenarios
-        probs.append(1.0 - sum(probs))  # lump the remainder into the last scenario
-        for (s, p) in zip(scenarios, probs):
+        for (s, p) in zip(scenarios, weights):
             f.write("    fuel_supply_curves_{s} {p}\n".format(s=s, p=p))
         f.write(";\n\n")
 
@@ -151,13 +167,13 @@ def save_pha_rho_file(m):
                 v.value = 0.0
 
     costs = []
-    baseval = value(m.Minimize_System_Cost)
+    baseval = value(m.SystemCost)
     # surprisingly slow, but it gets the job done
     for var in build_vars:
         print var
         for v in getattr(m, var).values():
             # perturb the value of each variable to find its coefficient in the objective function
-            v.value += 1; c = value(m.Minimize_System_Cost) - baseval; v.value -= 1
+            v.value += 1; c = value(m.SystemCost) - baseval; v.value -= 1
             costs.append((v.cname(), c))
     rho_file = os.path.join(m.options.inputs_dir, "rhos.tsv")
     print "writing {}...".format(rho_file)

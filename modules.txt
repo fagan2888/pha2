@@ -4,13 +4,15 @@ project.no_commit
 hawaii.fuel_markets_expansion
 hawaii.switch_patch
 hawaii.rps
-# not needed because HECO says they can comply with MATS with LSFO -> hawaii.emission_rules
+# next is not needed because HECO says they can comply with MATS with LSFO
+# hawaii.emission_rules
 hawaii.lng_conversion
 hawaii.ev
 hawaii.pumped_hydro
 hawaii.batteries_fixed_calendar_life
 hawaii.hydrogen
 hawaii.demand_response_simple
+hawaii.unserved_load
 psip
 pha
 #hawaii.smooth_dispatch
