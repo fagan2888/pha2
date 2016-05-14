@@ -11,7 +11,7 @@ hawaii.pumped_hydro
 hawaii.batteries_fixed_calendar_life
 hawaii.hydrogen
 hawaii.demand_response_simple
-pha
 psip
+pha
 #hawaii.smooth_dispatch
 hawaii.save_results

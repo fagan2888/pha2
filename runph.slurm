@@ -35,51 +35,86 @@
 #export workers_per_node=20  # number of slots to use for workers on each node (could be reduced to conserve RAM)
 #export runph_cmd='runph --phpyro-required-workers=117 --instance-directory=inputs/pha_117 --rho-cfgfile=callbacks --user-defined-extension=callbacks --verbose --enable-ww-extensions --ww-extension-cfgfile=wwph_slam.cfg --ww-extension-suffixfile=inputs/wwph_slam.suffixes --default-rho=100000000 --termdiff-threshold=0.001 --linearize-nonbinary-penalty-terms=7 --breakpoint-strategy=1 --solver-manager=phpyro --shutdown-pyro --pyro-port=$nsp --solver=cplexamp --scenario-solver-options="threads=1" --model-directory=. --traceback --max-iterations=1 --bounds-cfgfile=pha_bounds_cfg.py'
 
-# # evaluate quality of previous solutions
-# # was run once for slammed, converged model (job 422400)
-# # was run once for best solution for mean price forecast (job 422401)
-# # was run 117 times with best single solution for each scenario (job 422434-422437) (422408 / 422409 were canceled)
-# # was run once for HECO PSIP Preferred Plan (job 434551 allows fuel-switching but forces AES to run only on 50/50 coal/biomass)
-# # was run once for HECO PSIP Preferred Plan with common solar pool (job 434490)
-# #SBATCH --job-name=pheval
-# ##SBATCH --partition=community.q
-# ##SBATCH --time=1-00:00:00
-# #SBATCH --partition=kill.q
-# #SBATCH --time=0-01:00:00
+# # large memory: fails with errors run once with jobid ()
+# #SBATCH --mem-per-cpu=25000
+# #SBATCH --job-name=ph125evl
+# #SBATCH --partition=lm.q
+# #SBATCH --time=3-00:00:00
+# #SBATCH --nodes=1
+# #SBATCH --tasks-per-node=40
+# export coordinator_reserved_slots=0  # number of slots to reserve for the coordinator processes on the first node
+# export workers_per_node=40  # number of slots to use for workers on each node (could be reduced to conserve RAM)
+# export runph_cmd='runph --phpyro-required-workers=40 --instance-directory=inputs/pha_125_logistic --disable-xhat-computation --rho-cfgfile=callbacks --user-defined-extension=callbacks --default-rho=100000000 --termdiff-threshold=0.001 --linearize-nonbinary-penalty-terms=7 --breakpoint-strategy=1 --solver-manager=phpyro --shutdown-pyro --pyro-port=$nsp --solver=cplexamp --scenario-solver-options="threads=1" --model-directory=. --traceback --max-iterations=0 --bounds-cfgfile=pha_bounds_cfg.py'
+# # # pin the build variables to plan from a particular run or runs (used by pha_bounds_cfg.py)
+# # # best solution to 125 separate prices
+# export PHA_FIX_BUILD_VARS_FILES=outputs/build_540397_iter0_Scenario_*.tsv
+# export USE_PSIP_PLAN=0
+
+
+# evaluate quality of previous solutions
+# TODO: run 125 times with best single solution for each scenario (540419< 540420< 540423<)(lots of errors but still running?)
+# TODO: run once for HECO PSIP Preferred Plan (540421<done 540422pd) (540400<shutdown without saving)
+# TODO: run once for optimal plan with mean prices (540408<err-infeasible and 540409<infeasible)
+#SBATCH --job-name=ph125evl
+##SBATCH --partition=kill.q
+##SBATCH --time=2-00:00:00
+#SBATCH --partition=community.q
+#SBATCH --time=2-00:00:00
+#SBATCH --nodes=7
+#SBATCH --tasks-per-node=20
+#SBATCH --dependency=afterok:540397
+export coordinator_reserved_slots=15  # number of slots to reserve for the coordinator processes on the first node
+export workers_per_node=20  # number of slots to use for workers on each node (could be reduced to conserve RAM)
+export runph_cmd='runph --phpyro-required-workers=125 --instance-directory=inputs/pha_125_logistic --disable-xhat-computation --rho-cfgfile=callbacks --user-defined-extension=callbacks --default-rho=100000000 --termdiff-threshold=0.001 --linearize-nonbinary-penalty-terms=7 --breakpoint-strategy=1 --solver-manager=phpyro --shutdown-pyro --pyro-port=$nsp --solver=cplexamp --scenario-solver-options="threads=1" --model-directory=. --traceback --max-iterations=0 --bounds-cfgfile=pha_bounds_cfg.py'
+export PHA_WRITE_SCENARIO_SUMMARY=1
+# # pin the build variables to plan from a particular run or runs (used by pha_bounds_cfg.py)
+# # best solution to 125 separate prices
+export PHA_FIX_BUILD_VARS_FILES=outputs/build_540397_iter0_Scenario_*.tsv
+export USE_PSIP_PLAN=0
+# # HECO PSIP
+# export USE_PSIP_PLAN=1
+# export PHA_FIX_BUILD_VARS_FILE=outputs/build_540396_iter0_Scenario_0000.tsv
+# best solution for average prices
+# export PHA_FIX_BUILD_VARS_FILE=outputs/build_540398_iter0_Scenario_0000.tsv
+# export USE_PSIP_PLAN=0
+
+# # one solution for each scenario
+# #SBATCH --job-name=ph125gen
+# #SBATCH --partition=community.q
+# #SBATCH --time=0-02:00:00
 # #SBATCH --nodes=7
 # #SBATCH --tasks-per-node=20
-# export coordinator_reserved_slots=20  # number of slots to reserve for the coordinator processes on the first node
+# export coordinator_reserved_slots=15  # number of slots to reserve for the coordinator processes on the first node
 # export workers_per_node=20  # number of slots to use for workers on each node (could be reduced to conserve RAM)
-# export runph_cmd='runph --phpyro-required-workers=117 --instance-directory=inputs/pha_117 --disable-xhat-computation --rho-cfgfile=callbacks --user-defined-extension=callbacks --default-rho=100000000 --termdiff-threshold=0.001 --linearize-nonbinary-penalty-terms=7 --breakpoint-strategy=1 --solver-manager=phpyro --shutdown-pyro --pyro-port=$nsp --solver=cplexamp --scenario-solver-options="threads=1" --model-directory=. --traceback --max-iterations=0 --bounds-cfgfile=pha_bounds_cfg.py'
-# # pin the build variables to the final plan from a particular run (used by pha_bounds_cfg.py)
-# # this should force immediate convergence, but it's handy for testing the plan with all the scenarios.
-# # note: build_416974_xhat is the slammed, converged result for 117 scenarios
-# # build_422384_xhat is the single-scenario solution for the mean price forecast
-# # build_422385_iter0_Scenario_nnnn.tsv is the iteration-0 builds (optimal for each scenario)
-# # build_433934_iter0_Scenario_0000 or build_433934_xhat is our version of HECO's PSIP Preferred Plan
-# # build_434414_iter0_Scenario_0000 is a version of the Preferred Plan with common pool for dist and central solar
-# #export PHA_FIX_BUILD_VARS_FILES="outputs/build_416974_xhat.tsv"
-# #export PHA_FIX_BUILD_VARS_FILE="outputs/build_422384_xhat.tsv"
-# #export PHA_FIX_BUILD_VARS_FILES=outputs/build_422385_iter0_Scenario_*.tsv
-# export PHA_FIX_BUILD_VARS_FILE=outputs/build_433934_iter0_Scenario_0000.tsv
-# echo "evaluating PSIP scenario with fuel switching allowed and separate targets for distributed and central solar"
-# # export PHA_FIX_BUILD_VARS_FILE=outputs/build_434414_iter0_Scenario_0000.tsv
-# # echo "evaluating PSIP scenario with common target for distributed and central solar"
-# export INCLUDE_MODULES='psip'
+# # runph fails when we use the ww extensions and suffixes, because ConvertToLNG is not being added to the RootNode
+# # for some reason. This is hard to debug, but we don't need the ww extensions for the portfolio-generation
+# # approach anyway, so we disable them.
+# # runph also fails due to not finding bounds for BuildUnits when we use the linearize-nonbinary-penalty-terms
+# # breakpoint-strategy and bounds-cfgfile options, even though they should work too, so we also turn those off.
+# export runph_cmd='runph --phpyro-required-workers=125 --instance-directory=inputs/pha_125_logistic --user-defined-extension=callbacks --verbose --default-rho=100000000 --termdiff-threshold=0.001 --solver-manager=phpyro --shutdown-pyro --pyro-port=$nsp --solver=cplexamp --scenario-solver-options="threads=1" --model-directory=. --traceback --max-iterations=0'
 # export PHA_WRITE_SCENARIO_SUMMARY="1"
-# # double-check these match the specified builds...
 # export PHA_WRITE_ITER0_SCENARIO_BUILDS="1"
+# export USE_PSIP_PLAN=0
 
-# just one solution, for the mean pricing
-#SBATCH --job-name=ph125mean
-#SBATCH --partition=kill.q
-#SBATCH --time=0-02:00:00
-#SBATCH --nodes=1
-#SBATCH --tasks-per-node=2
-export coordinator_reserved_slots=1  # number of slots to reserve for the coordinator processes on the first node
-export workers_per_node=2  # number of slots to use for workers on each node (could be reduced to conserve RAM)
-export runph_cmd='runph --phpyro-required-workers=1 --instance-directory=inputs/pha_125_logistic_mean --user-defined-extension=callbacks --verbose --enable-ww-extensions --ww-extension-cfgfile=wwph.cfg --ww-extension-suffixfile=inputs/wwph.suffixes --default-rho=100000000 --termdiff-threshold=0.001 --linearize-nonbinary-penalty-terms=7 --breakpoint-strategy=1 --solver-manager=phpyro --shutdown-pyro --pyro-port=$nsp --solver=cplexamp --scenario-solver-options="threads=1" --model-directory=. --traceback --max-iterations=1000 --bounds-cfgfile=pha_bounds_cfg.py'
-export PHA_WRITE_ITER0_SCENARIO_BUILDS="1"
+# # just one solution, using the mean pricing
+# #SBATCH --job-name=ph125mean
+# #SBATCH --partition=kill.q
+# #SBATCH --time=0-02:00:00
+# #SBATCH --nodes=1
+# #SBATCH --tasks-per-node=2
+# export coordinator_reserved_slots=1  # number of slots to reserve for the coordinator processes on the first node
+# export workers_per_node=2  # number of slots to use for workers on each node (could be reduced to conserve RAM)
+# # runph fails when we use the ww extensions and suffixes, because ConvertToLNG is not being added to the RootNode
+# # for some reason. This is hard to debug, but we don't need the ww extensions for the portfolio-generation
+# # approach anyway, so we disable them.
+# # runph also fails due to not finding bounds for BuildUnits when we use the linearize-nonbinary-penalty-terms
+# # breakpoint-strategy and bounds-cfgfile options, even though they should work too, so we also turn those off.
+# # export runph_cmd='runph --phpyro-required-workers=1 --instance-directory=inputs/pha_125_logistic_mean --user-defined-extension=callbacks --verbose --default-rho=100000000 --termdiff-threshold=0.001 --solver-manager=phpyro --shutdown-pyro --pyro-port=$nsp --solver=cplexamp --scenario-solver-options="threads=1" --model-directory=. --traceback --max-iterations=0'
+# export runph_cmd='runph --phpyro-required-workers=1 --instance-directory=inputs/pha_125_logistic_mean --disable-xhat-computation --rho-cfgfile=callbacks --user-defined-extension=callbacks --default-rho=100000000 --termdiff-threshold=0.001 --linearize-nonbinary-penalty-terms=7 --breakpoint-strategy=1 --solver-manager=phpyro --shutdown-pyro --pyro-port=$nsp --solver=cplexamp --scenario-solver-options="threads=1" --model-directory=. --traceback --max-iterations=0 --bounds-cfgfile=pha_bounds_cfg.py'
+# echo "========= Solving for mean prices ============"
+# export USE_PSIP_PLAN=0
+# export PHA_WRITE_SCENARIO_SUMMARY=1
+# export PHA_WRITE_ITER0_SCENARIO_BUILDS=1
 
 # # one solution, for the PSIP preferred plan
 # #SBATCH --job-name=psip
@@ -89,13 +124,11 @@ export PHA_WRITE_ITER0_SCENARIO_BUILDS="1"
 # #SBATCH --tasks-per-node=2
 # export coordinator_reserved_slots=1  # number of slots to reserve for the coordinator processes on the first node
 # export workers_per_node=2  # number of slots to use for workers on each node (could be reduced to conserve RAM)
-# # 'pumped_hydro hydrogen batteries'
-# export runph_cmd='runph --phpyro-required-workers=1 --instance-directory=inputs/pha_117_mean --rho-cfgfile=callbacks --user-defined-extension=callbacks --verbose --enable-ww-extensions --ww-extension-cfgfile=wwph.cfg --ww-extension-suffixfile=inputs/wwph.suffixes --default-rho=100000000 --termdiff-threshold=0.001 --linearize-nonbinary-penalty-terms=7 --breakpoint-strategy=1 --solver-manager=phpyro --shutdown-pyro --pyro-port=$nsp --solver=cplexamp --scenario-solver-options="threads=1" --model-directory=. --traceback --max-iterations=1000 --bounds-cfgfile=pha_bounds_cfg.py'
-# export INCLUDE_MODULES='psip'
-# export PHA_WRITE_SCENARIO_SUMMARY="1"
-# export PHA_WRITE_ITER0_SCENARIO_BUILDS="1"
-# export PHA_WRITE_XHAT_BUILD="1"
-# echo "running PSIP scenario with common target for distributed and central solar"
+# export runph_cmd='runph --phpyro-required-workers=1 --instance-directory=inputs/pha_125_logistic_mean --user-defined-extension=callbacks --verbose --default-rho=100000000 --termdiff-threshold=0.001 --solver-manager=phpyro --shutdown-pyro --pyro-port=$nsp --solver=cplexamp --scenario-solver-options="threads=1" --model-directory=. --traceback --max-iterations=0'
+# echo ========= running PSIP scenario with mean prices ============
+# export USE_PSIP_PLAN=1
+# export PHA_WRITE_SCENARIO_SUMMARY=1
+# export PHA_WRITE_ITER0_SCENARIO_BUILDS=1
 
 ##SBATCH --job-name=phtiny
 ##SBATCH --partition=sb.q

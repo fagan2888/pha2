@@ -1,5 +1,8 @@
 """ adjustments and utility methods to support pha algorithm """
 
+# universal remote debugging
+#import debug
+
 import os, types
 from pyomo.environ import *
 import switch_mod.utilities as utilities
@@ -46,16 +49,27 @@ def dat_file_dir(m):
 
 def save_pha_dat_files(m):
     n_scenarios = m.options.pha_scenario_count
+    main_dir = dat_file_dir(m)
+    mean_dir = main_dir + '_mean'
+    save_root_node_file(m, main_dir)
+    save_root_node_file(m, mean_dir)
+    scenarios = [str(i).zfill(n_digits) for i in range(n_scenarios)]
+    # save the main structure file
+    save_scenario_structure_file(m, main_dir, scenarios)
+    # save a 1-scenario file in the _mean directory
+    save_scenario_structure_file(m, mean_dir, scenarios[0])
 
-    dat_file = os.path.join(dat_file_dir(m), "RootNode.dat")
+def save_root_node_file(m, file_dir):
+    dat_file = os.path.join(file_dir, "RootNode.dat")
     print "saving {}...".format(dat_file)
     utilities.save_inputs_as_dat(
         model=m, instance=m, save_path=dat_file,
-        exclude=["rfm_supply_tier_cost", "rfm_supply_tier_limit", "rfm_supply_tier_fixed_cost"])
-
-    scenarios = [str(i).zfill(n_digits) for i in range(n_scenarios)]
+        exclude=["rfm_supply_tier_cost", "rfm_supply_tier_limit", "rfm_supply_tier_fixed_cost"]
+    )
     
-    dat_file = os.path.join(dat_file_dir(m), "ScenarioStructure.dat")
+def save_scenario_structure_file(m, file_dir, scenarios):
+
+    dat_file = os.path.join(file_dir, "ScenarioStructure.dat")
     print "saving {}...".format(dat_file)
     with open(dat_file, "w") as f:
         # use show only the changed data in the dat files for each scenario

@@ -29,6 +29,7 @@ param ScenarioLeafNode :=
 set StageVariables[Build] := 
     BuildProj[*,*]
     BuildUnits[*,*]
+    ConvertToLNG[*,*]
     BuildBattery[*,*]
     BuildPumpedHydroMW[*,*]
     BuildAnyPumpedHydro[*,*]
@@ -46,7 +47,6 @@ set StageVariables[Operate] :=
     FuelConsumptionByTier[*,*,*]
     FuelConsumptionInMarket[*,*]
     BaseloadOperatingLevelForPeriod[*,*]
-    ConvertToLNG[*,*]
     ChargeEVs[*,*]
     PumpedHydroProjGenerateMW[*,*]
     PumpedHydroProjStoreMW[*,*]
