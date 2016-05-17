@@ -179,3 +179,17 @@ def save_pha_rho_file(m):
     print "writing {}...".format(rho_file)
     with open(rho_file, "w") as f:
         f.writelines("\t".join(map(str, r))+"\n" for r in costs)
+
+def set_bounds_from_build_file(m, build_file):
+    print "Pinning variables based on values in " + build_file
+    # note: this could be switched around to lookup the var based on its cname()
+    # (given in the build file), but it's not clear how to do that.
+    with open(build_file, "r") as f:
+        rows = [r[:-1].split('\t') for r in f.readlines()[1:]]  # skip headers; split at tabs; omit newlines
+        vals = {r[0]: float(r[1]) for r in rows}    
+
+    for var_name in build_vars:
+        if hasattr(m, var_name):
+            for v in getattr(m, var_name).values():
+                v.setlb(vals[v.cname()])
+                v.setub(vals[v.cname()])

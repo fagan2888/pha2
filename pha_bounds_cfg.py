@@ -1,6 +1,7 @@
 # use this by adding terms like the following to the runph command:
 # --linearize-nonbinary-penalty-terms=5 --breakpoint-strategy=1 --bounds-cfgfile=pha_bounds_cfg.py
 import os
+import pha
 
 print "loading pha_bounds_cfg.py"
 
@@ -91,30 +92,9 @@ def set_standard_bounds(self, scenario_tree, scenario):
                 # self.setVariableBoundsOneScenario(tree_node, scenario, var_id, 0.0, float(limit))
 
 def set_bounds_from_build_file(self, scenario_tree, scenario, build_file):
-    print "Pinning variables based on values in " + build_file
-
     m = scenario._instance 	# see pyomo/pysp/scenariotree/tree_structure.py
 
-    build_vars = [
-        "BuildProj", "BuildBattery", 
-        "BuildPumpedHydroMW", "BuildAnyPumpedHydro",
-        "RFMSupplyTierActivate",
-        "BuildElectrolyzerMW", "BuildLiquifierKgPerHour", "BuildLiquidHydrogenTankKg",
-        "BuildFuelCellMW"
-    ]
-
-    # note: this could be switched around to lookup the var based on its cname()
-    # (given in the build file), but it's not clear how to do that.
-    with open(os.path.join(build_file), "r") as f:
-        rows = [r[:-1].split('\t') for r in f.readlines()[1:]]  # skip headers; split at tabs; omit newlines
-        vals = {r[0]: float(r[1]) for r in rows}    
-
-    for var_name in build_vars:
-        if hasattr(m, var_name):
-            for v in getattr(m, var_name).values():
-                v.setlb(vals[v.cname()])
-                v.setub(vals[v.cname()])
-
+    pha.set_bounds_from_build_file(m, build_file)
     
 # for some reason runph looks for pysp_boundsetter_callback when run in single-thread mode
 # and ph_boundsetter_callback when called from mpirun with remote execution via pyro.
