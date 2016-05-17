@@ -15,6 +15,7 @@ should include pha.py as one of its modules (e.g., in modules.txt).
 # turn on universal exception debugging (on the runph side)
 # import debug
 
+import os, shlex
 import switch_mod.solve
     
 # if imported by another module, just create the model (which will be extracted by the other module)
@@ -34,9 +35,18 @@ if __name__ == '__main__':
         )
 else:
     # The module was imported; create the model so it can be used by runph 
-    # prevent processing of command-line arguments, since those are the runph args at this point
     print "defining model..."
     args = switch_mod.solve.get_option_file_args()
+    # Take arguments from environment variables, since all command-line arguments 
+    # are for runph at this point
+    for k, v in os.environ.iteritems:
+        if k.startswith('switch_'):
+            args.append('--' + k[len('switch_'):].replace('_', '-'))
+            if v.lower() == 'true' or v.lower() == '':
+                # special handling for on/off flags
+                pass
+            else:
+                args.extend(shlex.split(v)) # split at quotes just like argv
     model = switch_mod.solve.main(args=args, return_model=True)
 
 

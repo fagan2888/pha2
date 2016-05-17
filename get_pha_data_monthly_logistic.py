@@ -337,8 +337,90 @@ def plot():
 
 
 
+    # show the first 1000 of the original trajectories
+    fig, (ax1, ax2) = plt.subplots(1, 2, sharey=True, figsize=(8,4))
+    for i in range(1000):
+        # plot each row as a separate series, with appropriate width and alpha
+        ax1.plot(periods, oil_prices.T[i], '-', linewidth=1, alpha=0.3)
+    ax1.plot(periods, oil_prices.T.mean(axis=0), '-r', linewidth=3)
+    ax1.set_ylabel('Fuel price (2016$/MMBtu)')
+    ax1.set_ylim([0, 200])
+    ax1.set_xticks([2021, 2029, 2037, 2045])
+    ax1.set_title('Brent Crude')
+    for i in range(1000):
+        # plot each row as a separate series, with appropriate width and alpha
+        ax2.plot(periods, gas_prices.T[i], '-', linewidth=1, alpha=0.3)
+    ax2.plot(periods, sample_traj, '-k', linewidth=5*500*traj_weight[t_num])
+    ax2.plot(periods, gas_prices.T.mean(axis=0), '-r', linewidth=3)
+    ax2.set_ylim([0, 200])
+    ax2.set_title('Henry Hub Gas')
+    ax2.set_xticks([2021, 2029, 2037, 2045])
+    fig.show()
+    fig.savefig('oil_and_gas_raw_trajectories.pdf')
+
+    # show how trajectories are clustered into representative paths
+    # (choose the sample paths by inspecting oil_price_traj)
+    sample_trajectories = [116] # 80 is also interesting
+    fig, (ax1, ax2) = plt.subplots(1, 2, sharey=True, figsize=(8,4))
+    for t_num in sample_trajectories:
+        sample_traj = oil_price_traj[t_num]
+        traj_constituents = oil_prices.T[cluster_id==t_num, :]
+        if len(traj_constituents) > 500:
+            traj_constituents = traj_constituents[:500]
+        for i, traj in enumerate(traj_constituents):
+            # plot each row as a separate series, with appropriate width and alpha
+            ax1.plot(periods, traj, '-', linewidth=1, alpha=0.3)
+        ax1.plot(periods, sample_traj, '-k', linewidth=10*500*traj_weight[t_num])
+    ax1.set_ylabel('Fuel price (2016$/MMBtu)')
+    ax1.set_ylim([0, 200])
+    ax1.set_xticks(periods)
+    ax1.set_title('Brent Crude')
+    for t_num in sample_trajectories:
+        sample_traj = gas_price_traj[t_num]
+        traj_constituents = gas_prices.T[cluster_id==t_num, :]
+        if len(traj_constituents) > 500:
+            traj_constituents = traj_constituents[:500]
+        for i, traj in enumerate(traj_constituents):
+            # plot each row as a separate series, with appropriate width and alpha
+            ax2.plot(periods, traj, '-', linewidth=1, alpha=0.3)
+        ax2.plot(periods, sample_traj, '-k', linewidth=10*500*traj_weight[t_num])
+    ax2.set_ylim([0, 200])
+    ax2.set_title('Henry Hub Gas')
+    ax2.set_xticks(periods)
+    fig.show()
+    fig.savefig('fuel_price_trajectory_clustering.pdf')
+
 
     # show all the clusters
+    fig, (ax1, ax2) = plt.subplots(1, 2, sharey=True, figsize=(8,4))
+    for i, traj in enumerate(oil_price_traj):
+        # plot each row as a separate series, with appropriate width and alpha
+        if i in sample_trajectories:
+            ax1.plot(periods, traj, '-k', linewidth=2*500*traj_weight[i], alpha=0.8)
+        ax1.plot(periods, traj, '-', linewidth=500*traj_weight[i], alpha=0.3)
+    # for i in [78, 40, 28]:
+    #     ax1.plot(periods, oil_price_traj[i], '-k', linewidth=1.4)
+    # ax1.plot(periods, oil_prices.T.mean(axis=0), '-r', linewidth=3)
+    ax1.set_ylabel('Fuel price (2016$/MMBtu)')
+    ax1.set_ylim([0.001, 200])
+    ax1.set_xticks(periods)
+    ax1.set_title('Brent Crude')
+    for i, traj in enumerate(gas_price_traj):
+        # plot each row as a separate series, with appropriate width and alpha
+        if i in sample_trajectories:
+            ax2.plot(periods, traj, '-k', linewidth=2*500*traj_weight[i], alpha=0.8)
+        ax2.plot(periods, traj, '-', linewidth=500*traj_weight[i], alpha=0.3)
+    # for i in [78, 40, 28]:
+    #     ax2.plot(periods, gas_price_traj[i], '-k', linewidth=1.5)
+    # ax2.plot(periods, gas_prices.T.mean(axis=0), '-r', linewidth=3)
+    ax2.set_ylim([0.001, 200])
+    ax2.set_title('Henry Hub Gas')
+    ax2.set_xticks(periods)
+    fig.show()
+    fig.savefig('oil_and_gas_clustered_trajectories.pdf')
+
+
+
     fig = plt.figure()
     ax = fig.gca()
     for i, traj in enumerate(oil_price_traj):
@@ -346,21 +428,6 @@ def plot():
         ax.plot(periods, traj, '-', linewidth=500*traj_weight[i], alpha=0.3)
     ax.plot(periods, oil_prices.T.mean(axis=0), '-k', linewidth=5)
     ax.set_ylim([0, 200])
-    ax.set_xlim([2021, 2045])
-    fig.show()
-
-    # show how trajectories are clustered into representative paths
-    # (choose the sample paths by inspecting oil_price_traj)
-    fig = plt.figure()
-    ax = fig.gca()
-    for t_num in [20, 16]:
-        sample_traj = oil_price_traj[t_num]
-        traj_constituents = oil_prices.T[cluster_id==t_num, :]
-        for i, traj in enumerate(traj_constituents):
-            # plot each row as a separate series, with appropriate width and alpha
-            ax.plot(periods, traj, '-', linewidth=1, alpha=0.3)
-        ax.plot(periods, sample_traj, '-k', linewidth=5*500*traj_weight[t_num])
-    #ax.set_ylim([0, 60])
     ax.set_xlim([2021, 2045])
     fig.show()
 

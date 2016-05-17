@@ -23,6 +23,8 @@ build_vars = [
 # but we run as if there are, for simplicity (i.e., to avoid listing every var here)
 # It's possible this will cause infeasibilities, since the model is tightly constrained.
 
+import callbacks # has to happen after build_vars is defined, because it imports pha.build_vars
+
 n_digits = 4    # zero-padding in existing file names and scenario names
 
 def define_arguments(argparser):
@@ -34,12 +36,14 @@ def define_arguments(argparser):
         help="Subdirectory of inputs directory to store PHA data files in.")
     argparser.add_argument("--pha-scenario-count", type=int, default=1,
         help="Number of scenarios to use for PHA solution.")
+    argparser.add_argument("--pha-fix-build-vars-file", default=None,
+        help="File to read values from to pin build variables.")
 
 def define_components(m):
     # add methods to support PHA modeling
     m.save_pha_dat_files = types.MethodType(save_pha_dat_files, m)
     m.save_pha_rho_file = types.MethodType(save_pha_rho_file, m)
-
+    
 def define_dynamic_components(m):
     # add dummy expressions to keep runph happy
     # note: it doesn't seem to be necessary to 
@@ -49,6 +53,9 @@ def define_dynamic_components(m):
     m.BuildCost = Expression(rule=lambda m: 0.0)
     m.OperateCost = Expression(rule=lambda m: m.SystemCost)
 
+def pre_solve(m):
+    if m.options.pha_fix_build_vars_file is not None:
+        set_bounds_from_build_file(m, m.options.pha_fix_build_vars_file)
 
 def dat_file_dir(m):
     return os.path.join(m.options.inputs_dir, m.options.pha_subdir)
@@ -193,3 +200,9 @@ def set_bounds_from_build_file(m, build_file):
             for v in getattr(m, var_name).values():
                 v.setlb(vals[v.cname()])
                 v.setub(vals[v.cname()])
+                
+def post_solve(m, outputs_dir):
+    # write summary table (used when model is solved using standard switch solver, not runph)
+    # TODO: move all post-solve code from callbacks.py to here
+    scenario_name = m.options.scenario_name if m.options.scenario_name else ""
+    callbacks.write_summary_table(scenario_name, m)

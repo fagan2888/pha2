@@ -9,12 +9,16 @@ pha_dir = os.path.join(inputs_dir, pha_subdir)
 
 builds = [
     # (file tag, group name)
+    # ('20160517_084856_psip_preferred', 'PSIP'),
+    # ('20160517_084916_high_lng', 'High LNG'),
+    # ('20160517_084934_high_lsfo', 'High LSFO'),
+    # ('20160517_084856_high_re', 'High RE'),
     ("542667_b540876_iter0", "PSIP Theme 2 Preferred Plan"),
     ("542692_b540877_iter0", "cross-scenario tests"),
     ("542693_b540877_iter0", "cross-scenario tests"),
     ("542694_b540877_iter0", "cross-scenario tests"),
     ("542695_b540877_iter0", "cross-scenario tests"),
-    # ("b540398_iter0", "mean fuel prices"),
+    ("b540398_iter0", "mean fuel prices"),
 ]
 
 # read the weights for the scenarios

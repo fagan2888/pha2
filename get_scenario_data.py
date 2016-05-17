@@ -47,6 +47,8 @@ args = dict(
     discount_rate = 0.03,
     # used to convert nominal costs in the tables to real costs
     inflation_rate = 0.025,  
+    # TODO: specify this in the generator_costs_by_year table instead of here!
+    generator_costs_base_year = 2016,
 )
 
 # TODO: change fuel_markets_expansion to support more complex supply chains,

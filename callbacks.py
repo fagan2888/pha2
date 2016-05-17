@@ -7,6 +7,7 @@ from pyomo.pysp.phboundbase import ExtractInternalNodeSolutionsforInner
 from pyomo.pysp.phutils import indexToString
 
 import sys, os, datetime, inspect
+from collections import defaultdict
 
 from switch_mod.hawaii import util
 from switch_mod.hawaii.util import get
@@ -261,62 +262,90 @@ def write_summary_table(scenario_name, instance):
             )
                 for pe in m.PERIODS
         ])
-    # average production from each fuel during each period
+    # make a list of all projects for each label 
+    # (use tech name for wind and solar projects, except some)
+    proj_by_label = defaultdict(list)
+    for s in m.NON_FUEL_ENERGY_SOURCES:
+        for pr in m.PROJECTS_BY_NON_FUEL_ENERGY_SOURCE[s]:
+            tech_label = m.proj_gen_tech[pr] if s in {'SUN', 'WND'} else s
+            if tech_label in {'Kahuku_30_MW_WT', 'Kawailoa_69_MW_WT'}:
+                tech_label = 'OnshoreWind'
+            elif tech_label in {'Kalaeloa_5_MW_PV', 'CentralTrackingPV', 'CentralPV'}:
+                tech_label = 'UtilityScalePV'    # general utility-scale PV
+            elif tech_label in {'Solar_210_MW_PV', 'DistPV'}:
+                tech_label = 'DistributedPV'    # general distributed PV
+            proj_by_label[tech_label].append(pr)
+    # make a list of all regional fuel markets for each fuel
+    rfm_by_fuel = defaultdict(list)
+    for rfm in m.REGIONAL_FUEL_MARKET:
+        rfm_by_fuel[m.rfm_fuel[rfm]].append(rfm)    
+
+    # average production from each fuel during each period (GWh/year)
     values.extend([
         (
-            f, pe,
+            'GWh_' + f, pe,
             sum(
                 get(m.DispatchProjByFuel, (pr, tp, f), 0.0) * m.tp_weight[tp]
-                for pr in m.PROJECTS_BY_FUEL[f] for tp in m.PERIOD_TPS[pe]
-            ) / period_duration[pe]
+                    for pr in m.PROJECTS_BY_FUEL[f] for tp in m.PERIOD_TPS[pe]
+            ) * 8.76 / period_duration[pe]
         )
             for f in m.FUELS for pe in m.PERIODS
     ])    
-    # total production from each non-fuel source
+    # total production from each non-fuel source, in GWh
     values.extend([
         (
-            s, pe,
+            'GWh_' + label, pe,
             sum(
                 get(m.DispatchProj, (pr, tp), 0.0) * m.tp_weight[tp]
-                for pr in m.PROJECTS_BY_NON_FUEL_ENERGY_SOURCE[s] for tp in m.PERIOD_TPS[pe]
-            ) / period_duration[pe]
+                    for pr in proj_by_label[label] for tp in m.PERIOD_TPS[pe]
+            ) * 8.76 / period_duration[pe]
         )
-            for s in m.NON_FUEL_ENERGY_SOURCES for pe in m.PERIODS
+            for label in sorted(proj_by_label.keys()) for pe in m.PERIODS
     ])    
     # curtailments
     values.extend([
         (
-            "curtail_"+s, pe,
+            "curtail_GWh_"+label, pe,
             sum(
                 (get(m.DispatchUpperLimit, (pr, tp), 0.0) - get(m.DispatchProj, (pr, tp), 0.0)) 
                 * m.tp_weight[tp]
-                for pr in m.PROJECTS_BY_NON_FUEL_ENERGY_SOURCE[s] for tp in m.PERIOD_TPS[pe]
-            ) / period_duration[pe]
+                    for pr in proj_by_label[label] for tp in m.PERIOD_TPS[pe]
+            ) * 8.76 / period_duration[pe]
         )
-            for s in m.NON_FUEL_ENERGY_SOURCES for pe in m.PERIODS
+            for label in sorted(proj_by_label.keys()) for pe in m.PERIODS
     ])    
     # all LZ_Energy_Components
     values.extend([
         (
-            component, pe,
+            'GWh_' + component, pe,
             sum(
                 getattr(m, component)[lz, tp] * m.tp_weight[tp] 
                     for lz in m.LOAD_ZONES for tp in m.PERIOD_TPS[pe]
-            ) / period_duration[pe]
+            ) * 8.76 / period_duration[pe]
         )
             for component in m.LZ_Energy_Components_Produce for pe in m.PERIODS
     ])    
     values.extend([
         (
-            component, pe,
+            'GWh_' + component, pe,
             sum(
                 getattr(m, component)[lz, tp] * m.tp_weight[tp] 
                     for lz in m.LOAD_ZONES for tp in m.PERIOD_TPS[pe]
-            ) / period_duration[pe]
+            ) * 8.76 / period_duration[pe]
         )
             for component in m.LZ_Energy_Components_Consume for pe in m.PERIODS
     ])    
-
+    
+    # MMBtu consumed of each fuel
+    values.extend([
+        (
+            'MMBtu_' + f, pe,
+            sum(m.FuelConsumptionInMarket[rfm, pe] for rfm in rfm_by_fuel[f])
+        )
+            for pe in m.PERIODS
+                for f in m.FUELS
+    ])
+    
     with open(output_file, 'w') as f:
         f.writelines(
             "\t".join((key, str(per), str(value(val)))) + "\n"

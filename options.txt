@@ -19,7 +19,6 @@
 --pha-scenario-count 125
 --demand-response-share 0.103
 --biofuel-limit 1.0
---psip-relax
 --verbose 
 # note: following options are only used by 'switch solve', not runph (pha)
 --stream-solver
