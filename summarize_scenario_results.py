@@ -9,10 +9,12 @@ pha_dir = os.path.join(inputs_dir, pha_subdir)
 
 builds = [
     # (file tag, group name)
-    ("b540396_iter0", "PSIP preferred plan"),
+    ("542667_b540876_iter0", "PSIP Theme 2 Preferred Plan"),
+    ("542692_b540877_iter0", "cross-scenario tests"),
+    ("542693_b540877_iter0", "cross-scenario tests"),
+    ("542694_b540877_iter0", "cross-scenario tests"),
+    ("542695_b540877_iter0", "cross-scenario tests"),
     # ("b540398_iter0", "mean fuel prices"),
-    ("b540397_iter0", "cross-scenario tests"),
-    # ("b540397test_iter0", "cross-scenario tests"),
 ]
 
 # read the weights for the scenarios
@@ -22,7 +24,7 @@ with open(os.path.join(pha_dir, 'scenario_weights.tsv')) as f:
     data = [r[:-1].split("\t") for r in f]  # split at tabs; omit newline
     scenario_weight = {int(s): float(w) for s, w in data}
 
-build_scenarios = {}
+build_scenarios = defaultdict(dict)
 for tag, group in builds:
     match_files = glob("outputs/summary*{}*.tsv".format(tag))
     build_list = defaultdict(list)
@@ -32,16 +34,16 @@ for tag, group in builds:
         # the same as the tag. For the iter0 builds (which end with "Scenario_nnnn_Scenario_nnnn"),
         # this will include the name of the original scenario.
         scenario = f[f.index(tag):f.rfind('_Scenario_')]
-        build_list[scenario].append(f)
-    build_scenarios[group] = build_list
+        build_list[scenario].append(f)  # add filename to end of list for this scenario
+    build_scenarios[group].update(build_list)   # add all scenarios to build_scenarios list
 
 # now build_scenarios contains a list of case studies, each of which contains 
 # one or more scenarios, each of which contains names of many files showing the 
 # results of that scenario
 keys = []
 results_mean = {}
-results_05 = {}
-results_95 = {}
+results_low = {}
+results_high = {}
 
 # read data from summary files
 for group, build_list in build_scenarios.iteritems():
@@ -64,34 +66,40 @@ for group, build_list in build_scenarios.iteritems():
         weight = np.array([scenario_weight[id] for id in eval_scen_ids])
         weight = weight / weight.sum()  # normalize; probably not needed, but just in case
         results_mean[group, scenario] = dict()
-        results_05[group, scenario] = dict()
-        results_95[group, scenario] = dict()
+        results_low[group, scenario] = dict()
+        results_high[group, scenario] = dict()
         for k, v in vals.iteritems():
             val = np.array(v)   # vector of values for this key
             results_mean[group, scenario][k] = float(np.sum(val * weight))
             sort_idx = np.argsort(val)
             val_sort = val[sort_idx]
             val_rank = weight[sort_idx].cumsum() - 0.5 * weight[sort_idx]
-            results_05[group, scenario][k] = np.interp(x=0.05, xp=val_rank, fp=val_sort)
-            results_95[group, scenario][k] = np.interp(x=0.95, xp=val_rank, fp=val_sort)
+            results_low[group, scenario][k] = np.interp(x=0.05, xp=val_rank, fp=val_sort)
+            results_high[group, scenario][k] = np.interp(x=0.95, xp=val_rank, fp=val_sort)
 
-
-with open("outputs/summary_all_scenarios_weighted.tsv", "w") as f:
-    f.write("group\tscenario\t" + "\t".join(
-        ["_".join(key) for key in keys] 
-        + ["_".join(key)+"_05" for key in keys]
-        + ["_".join(key)+"_95" for key in keys]
-    ) + "\n")
+outfile = "outputs/summary_all_scenarios_weighted_05_95.tsv"
+print "writing {}...".format(outfile)
+with open(outfile, "w") as f:
+    row = ['group', 'scenario']
+    for key in keys:
+        k = '_'.join(key)
+        row.extend([k, k+'_up', k+'_down'])
+    f.write('\t'.join(row)+ '\n')
     for tag, group in builds:
         # write a row for each scenario in each group, sorted by scenario name (number)
         for scenario in sorted(build_scenarios[group].keys()):
-            try:
-                f.write("\t".join(
-                    [group, scenario]
-                    + [str(results_mean[group, scenario][key]) for key in keys]
-                    + [str(results_05[group, scenario][key]) for key in keys]
-                    + [str(results_95[group, scenario][key]) for key in keys]
-                ) + "\n")
-            except KeyError:
-                print "WARNING: KeyError for results_xx[{g}, {s}][{k}].".format(g=group, s=scenario, k=key)
-                f.write('\t'.join([group, scenario, 'MISSING DATA']) + '\n')
+            row = [group, scenario]
+            for key in keys:
+                try:
+                    mean = results_mean[group, scenario][key]
+                    low = results_low[group, scenario][key]
+                    high = results_high[group, scenario][key]
+                    row.extend([mean, high-mean, mean-low])
+                except KeyError:
+                    print "WARNING: KeyError for results_xx[{}, {}][{}].".format(group, scenario, key)
+                    row.extend(['MISSING DATA'] * 3)
+            f.write("\t".join(map(str, row)) + '\n')
+            # + [str(results_mean[group, scenario][key]) for key in keys]
+            # + [str(results_low[group, scenario][key]) for key in keys]
+            # + [str(results_high[group, scenario][key]) for key in keys]
+
