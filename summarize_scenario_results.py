@@ -3,6 +3,7 @@ from collections import defaultdict
 import numpy as np
 import os
 
+outfile = "outputs/summary_selected_scenarios_05_95.tsv"
 inputs_dir = 'inputs'
 pha_subdir = 'pha_125_logistic'
 pha_dir = os.path.join(inputs_dir, pha_subdir)
@@ -13,12 +14,14 @@ builds = [
     # ('20160517_084916_high_lng', 'High LNG'),
     # ('20160517_084934_high_lsfo', 'High LSFO'),
     # ('20160517_084856_high_re', 'High RE'),
-    ("542667_b540876_iter0", "PSIP Theme 2 Preferred Plan"),
-    ("542692_b540877_iter0", "cross-scenario tests"),
-    ("542693_b540877_iter0", "cross-scenario tests"),
-    ("542694_b540877_iter0", "cross-scenario tests"),
-    ("542695_b540877_iter0", "cross-scenario tests"),
-    ("b540398_iter0", "mean fuel prices"),
+    # ("542667_b540876_iter0", "PSIP Theme 2 Preferred Plan"),
+    # ("542692_b540877_iter0", "cross-scenario tests"),
+    # ("542693_b540877_iter0", "cross-scenario tests"),
+    # ("542694_b540877_iter0", "cross-scenario tests"),
+    # ("542695_b540877_iter0", "cross-scenario tests"),
+    # ("b540398_iter0", "mean fuel prices"),
+    ("543262_b540876_iter0", "PSIP Theme 2 Preferred Plan"),
+    ("b543259_iter0", "selected optimal plans"),
 ]
 
 # read the weights for the scenarios
@@ -81,7 +84,6 @@ for group, build_list in build_scenarios.iteritems():
             results_low[group, scenario][k] = np.interp(x=0.05, xp=val_rank, fp=val_sort)
             results_high[group, scenario][k] = np.interp(x=0.95, xp=val_rank, fp=val_sort)
 
-outfile = "outputs/summary_all_scenarios_weighted_05_95.tsv"
 print "writing {}...".format(outfile)
 with open(outfile, "w") as f:
     row = ['group', 'scenario']

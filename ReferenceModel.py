@@ -39,7 +39,7 @@ else:
     args = switch_mod.solve.get_option_file_args()
     # Take arguments from environment variables, since all command-line arguments 
     # are for runph at this point
-    for k, v in os.environ.iteritems:
+    for k, v in os.environ.iteritems():
         if k.startswith('switch_'):
             args.append('--' + k[len('switch_'):].replace('_', '-'))
             if v.lower() == 'true' or v.lower() == '':
