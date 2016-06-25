@@ -216,3 +216,13 @@ identify interesting questions -- what makes a solution low cost or low risk
 cluster portfolios and compare average values of build vars between the clusters to answer these questions
 compare low-risk to high-risk scenarios at various cost levels
 choose several different portfolios with different cost/risk levels; describe the general characteristics of each (how much RE and batteries, whether/when ConvertToLNG or RFMSupplyTierActivate are set)
+
+Additional steps:
+re-screen solar sites (exclude Class A land, separate Class B and C projects from others) (or make two separate sets of projects, some which include Class B and C land, some which don't) and then make clusters
+allow new CT_100 and CC_152 to use LNG
+sort out overlapping and separate costs for containerized and bulk LNG
+add local T&D cost?
+review e-mails to Murray Clay just before 2016-05-20 and find other steps that need to be done
+streamline workflow
+write readme.txt and post everything on github
+

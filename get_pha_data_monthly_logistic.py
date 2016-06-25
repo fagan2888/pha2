@@ -134,7 +134,7 @@ periods = sorted(set(float(r[period_ind]) for r in standard_fuel_costs))
 # build an empirical version of the joint distribution of price changes in 
 # oil (lsfo/diesel blend) and LNG, based on behavior in 2000-2015.
 # also factor out inflation of about 0.19% per month during this period
-# opening the workbook is the slowest part of the whole script
+# opening the workbook is slow
 print "loading 'Fuel Costs Monte Carlo-3.xlsx'"
 wb = openpyxl.load_workbook("Fuel Costs Monte Carlo-3.xlsx", data_only=True)
 ws = wb["DBEDT-HEI-BBG Fuel Jan'00-pres"]

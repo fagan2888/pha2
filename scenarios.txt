@@ -1,4 +1,4 @@
+--scenario-name high_lng --psip-relax --pha-fix-build-vars-file outputs/build_543259_iter0_Scenario_0119.tsv
+--scenario-name high_lsfo --psip-relax --pha-fix-build-vars-file outputs/build_543259_iter0_Scenario_0114.tsv
+--scenario-name high_re --psip-relax --pha-fix-build-vars-file outputs/build_543259_iter0_Scenario_0014.tsv
 --scenario-name psip_preferred --pha-fix-build-vars-file outputs/build_540876_iter0_Scenario_0000.tsv
---scenario-name high_lng --psip-relax --pha-fix-build-vars-file outputs/build_540877_iter0_Scenario_0078.tsv
---scenario-name high_lsfo --psip-relax --pha-fix-build-vars-file outputs/build_540877_iter0_Scenario_0040.tsv
---scenario-name high_re --psip-relax --pha-fix-build-vars-file outputs/build_540877_iter0_Scenario_0028.tsv
