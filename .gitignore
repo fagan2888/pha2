@@ -4,6 +4,8 @@
 *.err
 *.mem
 *_bak.tsv
+Pyro_NS_URI
+.DS_Store
 ~$*.xlsx
 progress*.txt
 switch-hawaii-core/
@@ -14,9 +16,12 @@ debug.pyc get_pha_data.pyc pha_bounds_cfg.pyc ReferenceModel.pyc reporting_phext
 logs/
 pyomo_examples_11103/
 old/
+# don't put analysis results and notes into repo
+*.xls*
+*.graffle
+*.pdf
+*.png
 outputs/
-Pyro_NS_URI
-.DS_Store
 notes/
 
 phbestbound.txt

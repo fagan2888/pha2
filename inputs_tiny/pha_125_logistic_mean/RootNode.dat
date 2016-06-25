@@ -12717,26 +12717,26 @@ param g_dbid := DistPV "DistPV" Waiau_LSFO_47.7_MW_ST "Waiau_LSFO_47.7_MW_ST" Ch
 param base_financial_year := 2016;
 param hydrogen_fuel_cell_fixed_cost_per_mw_year := 32896.8782328;
 param g_overnight_cost := 
- OffshoreWind 2037 1752839.50115
- IC_Barge 2021 1169796.49064
- CT_100 2021 1058233.31461
- DistPV 2037 1178520.53335
- CT_100 2037 666013.514333
- CentralTrackingPV 2021 2234566.7031
- CC_152 2037 905074.296368
- IC_MCBH 2021 2717937.66519
- CC_383 2021 1511761.87802
- OffshoreWind 2021 3582148.06498
- IC_Barge 2037 788000.009276
- OnshoreWind 2021 2037240.60567
- DistPV 2021 2655688.64668
- IC_Schofield 2021 2132635.20546
- CC_383 2037 958699.232064
- IC_MCBH 2037 1710676.38377
- OnshoreWind 2037 1257115.85895
- CentralTrackingPV 2037 1037739.39594
- CC_152 2021 1427685.2816
- IC_Schofield 2037 1342260.79502
+ OffshoreWind 2037 2944037.41437
+ IC_Barge 2021 1323517.35692
+ CT_100 2021 1197293.86331
+ DistPV 2037 1979421.6992
+ CT_100 2037 1118624.21139
+ CentralTrackingPV 2021 2528207.12013
+ CC_152 2037 1520146.36226
+ IC_MCBH 2021 3075096.99652
+ CC_383 2021 1710419.80473
+ OffshoreWind 2021 4052871.74051
+ IC_Barge 2037 1323510.5144
+ OnshoreWind 2021 2304950.75289
+ DistPV 2021 3004667.94574
+ IC_Schofield 2021 2412880.98656
+ CC_383 2037 1610213.83103
+ IC_MCBH 2037 2873221.00763
+ OnshoreWind 2037 2111428.98168
+ CentralTrackingPV 2037 1742968.2558
+ CC_152 2021 1615294.85302
+ IC_Schofield 2037 2254436.87103
 ;
 param g_energy_source := DistPV "SUN" Waiau_LSFO_47.7_MW_ST "multiple" Chevron_LSFO_3.2_MW_GT_cogen "multiple" CC_383 "multiple" IC_Schofield "multiple" Kahe_LSFO_77.9_MW_ST "multiple" CIP_Biodiesel_113_MW_GT "multiple" HPower_MLG_60_MW_ST "MSW" Kalaeloa_5_MW_PV "SUN" Kahe_LSFO_128.7_MW_ST "multiple" Chevron_LSFO_3_MW_GT_cogen "multiple" Waiau_LSFO_47.2_MW_ST "multiple" Kahe_LSFO_82.1_MW_ST "multiple" Kahe_LSFO_78.1_MW_ST "multiple" IC_Barge "multiple" Kawailoa_69_MW_WT "WND" AES_Coal_180_MW_ST "multiple" Waiau_LSFO_51.8_MW_ST "multiple" IC_MCBH "multiple" Honolulu_LSFO_51.7_MW_ST "multiple" Waiau_LSFO_77.8_MW_ST "multiple" Solar_210_MW_PV "SUN" Kahuku_30_MW_WT "WND" CT_100 "multiple" Waiau_LSFO_51.9_MW_ST "multiple" Kahe_LSFO_128.1_MW_ST "multiple" Tesoro_LSFO_20_MW_GT_cogen "multiple" CC_152 "multiple" Kahe_LSFO_87.2_MW_ST "multiple" Waiau_High-Sulfur-Diesel_51.2_MW_GT "multiple" OnshoreWind "WND" OffshoreWind "WND" Kalaeloa_107_MW_CC_cogen "multiple" Honolulu_LSFO_48.6_MW_ST "multiple" CentralTrackingPV "SUN";
 param proj_existing_cap := 
