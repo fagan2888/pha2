@@ -6,9 +6,9 @@ hawaii.switch_patch
 hawaii.rps
 # next is not needed because HECO says they can comply with MATS with LSFO
 # hawaii.emission_rules
-hawaii.lng_conversion
+lng_conversion
 hawaii.ev
-hawaii.pumped_hydro
+# hawaii.pumped_hydro
 hawaii.batteries_fixed_calendar_life
 hawaii.hydrogen
 hawaii.demand_response_simple

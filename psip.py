@@ -5,11 +5,13 @@ import pha
 def define_arguments(argparser):
     argparser.add_argument('--psip-relax', action='store_true', default=False, 
         help="Relax PSIP plans (retiring AES and building certain technologies) to find a more optimal strategy.")
+    argparser.add_argument('--force-build', nargs=3, default=None, 
+        help="List if year technology and quantity. Force construction of at least this quantity in this year.")
 
 def define_components(m):
     ###################
     # resource rules to match HECO's 2016-04-01 PSIP
-    ##################
+    ##################    
     
     # decide whether to enforce the PSIP preferred plan
     # if an environment variable is set, that takes precedence 
@@ -52,6 +54,22 @@ def define_components(m):
         (2017, 'DistPV',  92.751756737742),
         (2018, 'DistPV',  27.278236032368),
         (2019, 'DistPV',  26.188129564885),
+    ]
+    # projects proposed in PSIP but which may not be built if a better plan is found
+    technology_targets_psip = [     
+        (2018, 'OnshoreWind', 24),      # NPM wind
+        (2018, 'CentralTrackingPV', 109.6),  # replacement for canceled SunEdison projects
+        (2018, 'OnshoreWind', 10),      # CBRE wind
+        (2018, 'CentralTrackingPV', 15),  # CBRE PV
+        (2020, 'OnshoreWind', 30),
+        (2020, 'CentralTrackingPV', 60),
+        (2021, 'CC_383', 383.0),
+        (2030, 'CentralTrackingPV', 100),
+        (2030, 'OffshoreWind', 200),
+        (2040, 'CentralTrackingPV', 200),
+        (2040, 'OffshoreWind', 200),
+        (2045, 'CentralTrackingPV', 300),
+        (2045, 'OffshoreWind', 400),
         (2020, 'DistPV',  21.8245069017911),
         (2021, 'DistPV',  15.27427771741),
         (2022, 'DistPV',  12.0039583149589),
@@ -79,22 +97,14 @@ def define_components(m):
         (2044, 'DistPV',  15.27747451057),
         (2045, 'DistPV',  10.291675978754),
     ]
-    # projects proposed in PSIP but which may not be built if a better plan is found
-    technology_targets_psip = [     
-        (2018, 'OnshoreWind', 24),      # NPM wind
-        (2018, 'CentralTrackingPV', 109.6),  # replacement for canceled SunEdison projects
-        (2018, 'OnshoreWind', 10),      # CBRE wind
-        (2018, 'CentralTrackingPV', 15),  # CBRE PV
-        (2020, 'OnshoreWind', 30),
-        (2020, 'CentralTrackingPV', 60),
-        (2021, 'CC_383', 383.0),
-        (2030, 'CentralTrackingPV', 100),
-        (2030, 'OffshoreWind', 200),
-        (2040, 'CentralTrackingPV', 200),
-        (2040, 'OffshoreWind', 200),
-        (2045, 'CentralTrackingPV', 300),
-        (2045, 'OffshoreWind', 400),
-    ]
+
+    if m.options.force_build is not None:
+        b = list(m.options.force_build)
+        b[0] = int(b[0])    # year
+        b[2] = float(b[2])  # quantity
+        b = tuple(b)
+        print "Forcing build: {}".format(b)
+        technology_targets_definite.append(b)
     
     if psip:
         technology_targets = technology_targets_definite + technology_targets_psip
@@ -209,12 +219,13 @@ def define_components(m):
         # This could have extra code to skip the constraint if there are no periods after 2021,
         # but it is unlikely ever to be run that way.
         # Note: this is not needed if some plants are forced to run on LNG
-        m.PSIP_Force_LNG_Conversion = Constraint(m.LOAD_ZONES, rule=lambda m, z:
-                m.ConvertToLNG[
-                    z,
-                    min(per for per in m.PERIODS if per + m.period_length_years[per] > 2021)
-                ] == 1
-            )
+        # NOTE: this is no longer used; use '--force-lng-tier container' instead
+        # m.PSIP_Force_LNG_Conversion = Constraint(m.LOAD_ZONES, rule=lambda m, z:
+        #         m.ConvertToLNG[
+        #             z,
+        #             min(per for per in m.PERIODS if per + m.period_length_years[per] > 2021)
+        #         ] == 1
+        #     )
         
         # # Kahe 5, Kahe 6, Kalaeloa and CC_383 only burn LNG after 2021
         # # This is not used because it creates a weird situation where HECO runs less-efficient non-LNG
@@ -239,12 +250,16 @@ def define_components(m):
         def no_advanced_tech_rule_factory(v):
             return lambda m, *k: (getattr(m, v)[k] == 0)
         for v in advanced_tech_vars:
-            var = getattr(m, v)
-            setattr(m, "PSIP_No_"+v, Constraint(var._index, rule=no_advanced_tech_rule_factory(v)))
+            try:
+                var = getattr(m, v)
+                setattr(m, "PSIP_No_"+v, Constraint(var._index, rule=no_advanced_tech_rule_factory(v)))
+            except AttributeError:
+                pass    # model doesn't have this var
 
-        # don't allow any changes to the fuel market, including bulk LNG
-        m.PSIP_Deactivate_Limited_RFM_Supply_Tiers = Constraint(m.RFM_SUPPLY_TIERS,
-            rule=lambda m, r, p, st:
-                Constraint.Skip if (m.rfm_supply_tier_limit[r, p, st] == float('inf'))
-                else (m.RFMSupplyTierActivate[r, p, st] == 0)
-        )
+        # # don't allow any changes to the fuel market, including bulk LNG
+        # # not used now; use "--force-lng-tier container" instead
+        # m.PSIP_Deactivate_Limited_RFM_Supply_Tiers = Constraint(m.RFM_SUPPLY_TIERS,
+        #     rule=lambda m, r, p, st:
+        #         Constraint.Skip if (m.rfm_supply_tier_limit[r, p, st] == float('inf'))
+        #         else (m.RFMSupplyTierActivate[r, p, st] == 0)
+        # )

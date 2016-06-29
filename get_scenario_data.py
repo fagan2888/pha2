@@ -41,7 +41,7 @@ args = dict(
     # should the must_run flag be converted to set minimum commitment for existing plants?
     enable_must_run = 0,     
     # list of technologies to exclude
-    exclude_technologies = ('CentralFixedPV', 'DistPV_flat'),     
+    exclude_technologies = ('CentralFixedPV',),     
     base_financial_year = 2016,
     interest_rate = 0.06,
     discount_rate = 0.03,
@@ -49,15 +49,6 @@ args = dict(
     inflation_rate = 0.025,  
     # TODO: specify this in the generator_costs_by_year table instead of here!
     generator_costs_base_year = 2016,
-)
-
-# TODO: change fuel_markets_expansion to support more complex supply chains,
-# e.g., a regional facility (LNG switch) in line with a market upgrade (bulk LNG),
-# and possibly additional upgrades beyond (e.g., adding a second FSRU).
-# For now, we include the cost of the LNG switch via ad-hoc constraints in psip.py 
-args.update(
-    bulk_lng_fixed_cost = 1.75,     # fixed cost per MMBtu/year of capacity developed
-    bulk_lng_limit = 43446735.1,    # limit on bulk LNG capacity (MMBtu/year)
 )
 
 # data for sodium sulfur batteries from Dropbox/kauai/OPL/Storage/power_plan.xlsx
@@ -230,11 +221,16 @@ args.update(
 
 # data definitions for alternative scenarios
 alt_args = [
-    dict(inputs_dir="inputs", time_sample="rps_mini"),
-    dict(inputs_dir="inputs_tiny", time_sample="tiny"),
+    # dict(inputs_dir="inputs", time_sample="rps_mini"),
+    # dict(inputs_dir="inputs_tiny", time_sample="tiny"),
+    # dict(
+    #     inputs_dir="inputs_tiny_tiny", time_sample="tiny",
+    #     exclude_technologies=args["exclude_technologies"]+('CentralTrackingPV', 'Wind')
+    # ),
+    # short, hedged scenario
     dict(
-        inputs_dir="inputs_tiny_tiny", time_sample="tiny",
-        exclude_technologies=args["exclude_technologies"]+('CentralTrackingPV', 'Wind')
+        inputs_dir="inputs_short", 
+        time_sample="2020_2025", fuel_scen_id='hedged'
     ),
 ]
 

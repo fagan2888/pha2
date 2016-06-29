@@ -289,7 +289,7 @@ def write_summary_table(scenario_name, instance):
                     for pr in m.PROJECTS_BY_FUEL[f] for tp in m.PERIOD_TPS[pe]
             ) * 8.76 / period_duration[pe]
         )
-            for f in m.FUELS for pe in m.PERIODS
+            for f in sorted(m.FUELS) for pe in m.PERIODS
     ])    
     # total production from each non-fuel source, in GWh
     values.extend([
@@ -323,7 +323,7 @@ def write_summary_table(scenario_name, instance):
                     for lz in m.LOAD_ZONES for tp in m.PERIOD_TPS[pe]
             ) * 8.76 / period_duration[pe]
         )
-            for component in m.LZ_Energy_Components_Produce for pe in m.PERIODS
+            for component in sorted(m.LZ_Energy_Components_Produce) for pe in m.PERIODS
     ])    
     values.extend([
         (
@@ -333,7 +333,7 @@ def write_summary_table(scenario_name, instance):
                     for lz in m.LOAD_ZONES for tp in m.PERIOD_TPS[pe]
             ) * 8.76 / period_duration[pe]
         )
-            for component in m.LZ_Energy_Components_Consume for pe in m.PERIODS
+            for component in sorted(m.LZ_Energy_Components_Consume) for pe in m.PERIODS
     ])    
     
     # MMBtu consumed of each fuel
@@ -342,8 +342,7 @@ def write_summary_table(scenario_name, instance):
             'MMBtu_' + f, pe,
             sum(m.FuelConsumptionInMarket[rfm, pe] for rfm in rfm_by_fuel[f])
         )
-            for pe in m.PERIODS
-                for f in m.FUELS
+            for f in sorted(m.FUELS) for pe in m.PERIODS
     ])
     
     with open(output_file, 'w') as f:

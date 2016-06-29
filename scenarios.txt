@@ -1,4 +1,7 @@
---scenario-name high_lng --psip-relax --pha-fix-build-vars-file outputs/build_543259_iter0_Scenario_0119.tsv
---scenario-name high_lsfo --psip-relax --pha-fix-build-vars-file outputs/build_543259_iter0_Scenario_0114.tsv
---scenario-name high_re --psip-relax --pha-fix-build-vars-file outputs/build_543259_iter0_Scenario_0014.tsv
---scenario-name psip_preferred --pha-fix-build-vars-file outputs/build_540876_iter0_Scenario_0000.tsv
+--scenario-name psip_short --force-lng-tier container
+--scenario-name container_short --psip-relax --force-lng-tier container
+--scenario-name bulk_short --psip-relax --force-lng-tier bulk
+--scenario-name no_lng_short --psip-relax --force-lng-tier none
+--scenario-name container_cc_383_short --psip-relax --force-lng-tier container --force-build 2020 CC_383 383
+--scenario-name bulk_cc_383_short --psip-relax --force-lng-tier bulk --force-build 2020 CC_383 383
+--scenario-name no_lng_cc_383_short --psip-relax --force-lng-tier none --force-build 2020 CC_383 383
